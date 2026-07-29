@@ -2,7 +2,7 @@
 ## Integrantes
 [Divancy Bruno Torres Silva](https://github.com/DivBruno) \
  [Leonardo Sabino Pereira](https://github.com/leandrosilvaoltlook-ship-it)\
-[Maria Gabriela da Silva Vasconcelos]() \
+[Maria Gabriela da Silva Vasconcelos](https://github.com/GabrieSVasc) \
 [Otávio Alencar de Farias Marçal](https://github.com/otavio-alencar) \
 [Pedro Henrique da Silva Farias](https://github.com/Pedro-Henrique-Da-Silva-Farias) 
 
