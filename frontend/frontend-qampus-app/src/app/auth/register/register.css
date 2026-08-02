@@ -1,18 +1,23 @@
 .main-div{
     margin: 0;
-    min-height: 100vh;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 .header{
     background-color: #111626;
     color: white;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
     position: fixed;
     height: 80px;
+    z-index: 10;
 }
 .container{
     background-color: #F2EEEB;
@@ -21,14 +26,16 @@
     width: 25%;
     padding: 30px;
     font-size: large;
+    box-sizing: border-box;
 }
 .input{
     height: 40px;
     border-radius: 8px;
     background-color: white;
+    box-sizing: border-box;
 }
 .button{
-    background-color: none;
+    background-color: transparent;
     color: #2c2c2c;
     font-size: large;
     height: 40px;
