@@ -1,0 +1,51 @@
+.main-div {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #111626;
+    color: #f2eeeb;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 50%;
+    text-align: center;
+}
+
+h1 {
+    font-size: 80pt;
+    margin: 0;
+    text-align: left;
+}
+
+h2{
+    text-align: left;
+}
+
+p {
+    text-align: justify;
+    font-size: larger;
+    width: 50%;
+}
+
+button {
+    cursor: pointer;
+    font-size: large;
+    height: 50px;
+    border-radius: 8px;
+    width: 160px;
+    border: 1px solid #f2eeeb;
+    margin: 5px;
+}
+
+.login {
+    background-color: #6da0a6;
+    color: #111626;
+}
+
+.home {
+    background-color: #111626;
+    color: #f2eeeb;
+}
