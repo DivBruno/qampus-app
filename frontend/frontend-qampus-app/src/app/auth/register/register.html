@@ -1,0 +1,39 @@
+<div class="main-div">
+    <header class="header">
+        <h1 style="padding-left: 50px;">QAmpus</h1>
+    </header>
+    <div class="container">
+        <form [formGroup]="registerForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
+            <b><label for="username">Nome de Usuário</label></b>
+            <input class="input" id="username" formControlName="username">
+            <br>
+            <b><label for="email">Email</label></b>
+            <input type="email" class="input" id="email" formControlName="email">
+            @if(registerForm.controls.email.invalid && registerForm.controls.email.touched){
+                <p class="alert">Email inválido</p>
+            }
+            <br>
+            <b><label for="password">Senha</label></b>
+            <input type="password" id="password" class="input" formControlName="password">
+            <br>
+            <b><label>Confirmar a Senha</label></b>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword" class="input">
+            @if (registerForm.controls.confirmPassword.value != registerForm.controls.password.value && registerForm.controls.confirmPassword.touched) {
+                <p class="alert">As senhas não coincidem</p>
+            }
+            <br>
+            <div>
+                <div style="float: left;">
+                    <input type="radio" name="role" id="roleAluno" formControlName="role" value="STUDENT">
+                    <b><label for="roleAluno">Aluno</label></b>
+                </div>
+                <div style="float: right;">
+                    <input type="radio" name="role" id="roleProfessor" formControlName="role" value="PROFESSOR">
+                    <b><label for="roleProfessor">Professor</label></b>
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="button">Registrar</button>
+        </form>
+    </div>
+</div>

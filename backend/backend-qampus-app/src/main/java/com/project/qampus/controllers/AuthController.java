@@ -56,5 +56,9 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().build();
+     @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok("Logout efetuado com sucesso.");
     }
 }
