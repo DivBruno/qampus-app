@@ -4,13 +4,10 @@ import com.project.qampus.repositories.UserRepository;
 import com.project.qampus.service.security.TokenService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.project.qampus.dto.LoginRequestDTO;
 import com.project.qampus.dto.RegisterRequestDTO;
@@ -27,9 +24,9 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    // CRIEM AS ROTAS PARA /login /cadastro /edit /logout
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO body){
+    public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO body){
         User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
 
         if(passwordEncoder.matches(body.password(), user.getPassword())){
@@ -40,11 +37,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDTO body){
+    public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body) {
         Optional<User> user = this.repository.findByEmail(body.email());
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             User newUser = new User();
-            newUser.setPassword(passwordEncoder.encode(body.password())); 
+            newUser.setPassword(passwordEncoder.encode(body.password()));
             newUser.setEmail(body.email());
             newUser.setName(body.name());
             newUser.setRole(Role.STUDENT);
@@ -56,7 +53,8 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().build();
-     @PostMapping("/logout")
+    }
+    @DeleteMapping("/logout")
     public ResponseEntity<String> logout() {
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Logout efetuado com sucesso.");
