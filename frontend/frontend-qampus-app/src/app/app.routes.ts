@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { Register } from './auth/register/register';
-import { Unauthorized } from './auth/unauthorized/unauthorized';
+import { Login } from './auth/login/login';
+import { Logout } from './logout/logout';
 
 export const routes: Routes = [
-    {
-        path: 'registrar',
-        component: Register
-    },
-    {
-        path: 'unauthorized',
-        component: Unauthorized
-    }
+  {
+    path: 'login',
+    component: Login
+  },
+  {
+    path: 'logout',
+    component: Logout
+  }
 ];
