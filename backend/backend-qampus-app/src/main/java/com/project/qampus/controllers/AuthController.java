@@ -4,10 +4,13 @@ import com.project.qampus.repositories.UserRepository;
 import com.project.qampus.service.security.TokenService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.project.qampus.dto.LoginRequestDTO;
 import com.project.qampus.dto.RegisterRequestDTO;
@@ -24,9 +27,9 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-
+    // CRIEM AS ROTAS PARA /login /cadastro /edit /logout
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO body){
+    public ResponseEntity login(@RequestBody LoginRequestDTO body){
         User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
 
         if(passwordEncoder.matches(body.password(), user.getPassword())){
@@ -53,10 +56,5 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().build();
-    }
-    @DeleteMapping("/logout")
-    public ResponseEntity<String> logout() {
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok("Logout efetuado com sucesso.");
     }
 }
