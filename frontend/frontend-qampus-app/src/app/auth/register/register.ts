@@ -14,8 +14,9 @@ export class Register {
   constructor(
     private authService: AuthService
   ){}
+  submitClicked: boolean = false;
   registerForm = new FormGroup({
-    username: new FormControl('', Validators.required),
+    nome: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
     confirmPassword: new FormControl('', Validators.required),
@@ -23,9 +24,10 @@ export class Register {
   })
 
   submit(){
+    this.submitClicked = true;
     if(this.registerForm.valid){
       const user: User = {
-        username: this.registerForm.value.username!,
+        nome: this.registerForm.value.nome!,
         email: this.registerForm.value.email!,
         password: this.registerForm.value.password!,
         role: this.registerForm.value.role!
