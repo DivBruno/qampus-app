@@ -37,7 +37,11 @@ export class Register {
         role: this.registerForm.value.role!
       }
       const response = await this.authService.register(user);
-      console.log(response);
+      if(response){
+        this.router.navigate(['home']);
+      }else{
+        alert("Já existe uma conta cadastrada com este email.");
+      }
     }
   }
 }

@@ -12,27 +12,44 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
+  async logout(): Promise<boolean> {
+    try{
+      const response = await fetch(this.apiUrl+"/logout", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+localStorage.getItem('token')}
+      });
+      if(response.ok){
+        localStorage.removeItem('token');
+        return true;
+      }else{
+        return false;
+      }
+    }catch(error){
+      console.error('Error logging out: ', error);
+      return false;
+    }
   }
 
   isAuthenticated(): boolean{
     return !!this.getToken();
   }
 
-  async register(user: User): Promise<User|null>{
+  async register(user: User): Promise<boolean>{
     try{
       const response = await fetch(this.apiUrl+"/register", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user)
       })
+      if(!response.ok){
+        return false;
+      }
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      return data;
+      return true;
     }catch(error){
       console.error('Error registering user: ', error);
-      return null;
+      return false;
     }
   }
 

@@ -15,8 +15,12 @@ export class Logout {
     private router: Router
   ) {}
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+  async logout() {
+    const resposta = await this.authService.logout();
+    if(resposta){
+      this.router.navigate(['/login']);
+    }else{
+      alert("Erro ao realizar o logout");
+    }
   }
 }

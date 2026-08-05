@@ -23,7 +23,7 @@ export class Login {
     if(sucesso){
       this.router.navigate(["home"]);
     }else{
-      console.log("Email ou Senha inválidos");
+      alert("Email ou Senha Inválidos");
     }
   }
   goTo(rota: string){
