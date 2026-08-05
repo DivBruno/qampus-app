@@ -1,10 +1,10 @@
 package com.project.qampus.controllers;
 
+import com.project.qampus.repositories.BlacklistedTokenRepository;
 import com.project.qampus.repositories.UserRepository;
 import com.project.qampus.service.security.TokenService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,19 +15,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.project.qampus.dto.LoginRequestDTO;
 import com.project.qampus.dto.RegisterRequestDTO;
 import com.project.qampus.dto.ResponseDTO;
+import com.project.qampus.model.BlacklistedToken;
 import com.project.qampus.model.User;
 import com.project.qampus.model.enums.Role;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final BlacklistedTokenRepository blacklistRepository;
 
-    // CRIEM AS ROTAS PARA /login /cadastro /edit /logout
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body){
         User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -42,6 +45,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body) {
         Optional<User> user = this.repository.findByEmail(body.email());
+
         if (user.isEmpty()) {
             User newUser = new User();
             newUser.setPassword(passwordEncoder.encode(body.password()));
@@ -56,5 +60,24 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String token = authorization.substring(7);
+
+        BlacklistedToken blacklistedToken = new BlacklistedToken();
+        blacklistedToken.setToken(token);
+
+        blacklistRepository.save(blacklistedToken);
+
+        return ResponseEntity.ok().build();
     }
 }
