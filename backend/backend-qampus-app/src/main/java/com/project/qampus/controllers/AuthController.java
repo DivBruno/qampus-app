@@ -47,7 +47,7 @@ public class AuthController {
             newUser.setPassword(passwordEncoder.encode(body.password()));
             newUser.setEmail(body.email());
             newUser.setName(body.name());
-            newUser.setRole(Role.STUDENT);
+            newUser.setRole(body.role());
 
             this.repository.save(newUser);
 
