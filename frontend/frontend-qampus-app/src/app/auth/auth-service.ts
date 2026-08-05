@@ -34,6 +34,35 @@ export class AuthService {
     }
   }
 
+  async login(email: string, senha: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: senha
+        })
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem('token', data.token);
+
+      return true;
+
+    } catch (error) {
+      console.error('Error logging in: ', error);
+      return false;
+    }
+  }
+
   hasRole(requiredRole: string): boolean{
     const token = this.getToken();
     if(!token){
