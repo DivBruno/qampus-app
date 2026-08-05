@@ -5,8 +5,8 @@
     <div class="container">
         <form [formGroup]="registerForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
             <b><label for="nome">Nome</label></b>
-            <input class="input" id="nome" formControlName="nome">
-            @if (registerForm.controls.nome.value=='' && submitClicked) {
+            <input class="input" id="nome" formControlName="name">
+            @if (registerForm.controls.name.value=='' && submitClicked) {
                 <p class="alert">Digite o nome</p>
             }
             <br>

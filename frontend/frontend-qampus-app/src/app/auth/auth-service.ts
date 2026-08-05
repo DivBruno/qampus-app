@@ -22,12 +22,14 @@ export class AuthService {
 
   async register(user: User): Promise<User|null>{
     try{
-      const response = await fetch(this.apiUrl, {
+      const response = await fetch(this.apiUrl+"/register", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(user)
       })
-      return await response.json();
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      return data;
     }catch(error){
       console.error('Error registering user: ', error);
       return null;
@@ -43,7 +45,7 @@ export class AuthService {
         },
         body: JSON.stringify({
           email: email,
-          senha: senha
+          password: senha
         })
       });
 
