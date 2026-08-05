@@ -9,7 +9,6 @@ export const routes: Routes = [
     path: 'login',
     component: Login
   },
-
   {
     path: 'logout',
     component: Logout
