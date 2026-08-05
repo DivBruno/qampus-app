@@ -1,5 +1,7 @@
 package com.project.qampus.dto;
 
-public record RegisterRequestDTO(String name, String email, String password) {
+import com.project.qampus.model.enums.Role;
+
+public record RegisterRequestDTO(String name, String email, String password, Role role) {
     
 }
