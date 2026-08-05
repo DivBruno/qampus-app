@@ -1,24 +1,36 @@
 <div class="main-div">
     <header class="header">
-        <h1 style="padding-left: 50px;">QAmpus</h1>
+        <h1 style="padding-left: 50px;">Qampus</h1>
     </header>
     <div class="container">
         <form [formGroup]="registerForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
-            <b><label for="username">Nome de Usuário</label></b>
-            <input class="input" id="username" formControlName="username">
+            <b><label for="nome">Nome</label></b>
+            <input class="input" id="nome" formControlName="nome">
+            @if (registerForm.controls.nome.value=='' && submitClicked) {
+                <p class="alert">Digite o nome</p>
+            }
             <br>
             <b><label for="email">Email</label></b>
             <input type="email" class="input" id="email" formControlName="email">
-            @if(registerForm.controls.email.invalid && registerForm.controls.email.touched){
+            @if (registerForm.controls.email.value=='' && submitClicked) {
+                <p class="alert">Digite o email</p>
+            }
+            @else if(registerForm.controls.email.invalid && submitClicked){
                 <p class="alert">Email inválido</p>
             }
             <br>
             <b><label for="password">Senha</label></b>
             <input type="password" id="password" class="input" formControlName="password">
+            @if (registerForm.controls.password.value=='' && submitClicked) {
+                <p class="alert">Digite a senha</p>
+            }
             <br>
             <b><label>Confirmar a Senha</label></b>
             <input type="password" id="confirmPassword" formControlName="confirmPassword" class="input">
-            @if (registerForm.controls.confirmPassword.value != registerForm.controls.password.value && registerForm.controls.confirmPassword.touched) {
+            @if(registerForm.controls.confirmPassword.value=='' && submitClicked){
+                <p class="alert">Confirme a senha</p>
+            }
+            @else if (registerForm.controls.confirmPassword.value != registerForm.controls.password.value && submitClicked) {
                 <p class="alert">As senhas não coincidem</p>
             }
             <br>
@@ -32,8 +44,15 @@
                     <b><label for="roleProfessor">Professor</label></b>
                 </div>
             </div>
+            @if (submitClicked && registerForm.controls.role.value=='') {
+                <p class="alert" style="text-align: center;">Escolha uma opção</p>
+            }
             <br>
             <button type="submit" class="button">Registrar</button>
         </form>
+        <br>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <a (click)="goTo('login')" href="">Voltar</a>
+        </div>
     </div>
 </div>
