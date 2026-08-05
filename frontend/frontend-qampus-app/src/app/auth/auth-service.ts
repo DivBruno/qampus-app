@@ -12,6 +12,10 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  logout(): void {
+    localStorage.removeItem('token');
+  }
+
   isAuthenticated(): boolean{
     return !!this.getToken();
   }
@@ -27,6 +31,35 @@ export class AuthService {
     }catch(error){
       console.error('Error registering user: ', error);
       return null;
+    }
+  }
+
+  async login(email: string, senha: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: senha
+        })
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem('token', data.token);
+
+      return true;
+
+    } catch (error) {
+      console.error('Error logging in: ', error);
+      return false;
     }
   }
 
