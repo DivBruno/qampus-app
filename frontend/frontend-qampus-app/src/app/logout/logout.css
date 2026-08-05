@@ -1,0 +1,25 @@
+.topbar {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.topbar h1 {
+  margin: 0;
+}
+
+.logout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+}
+
+.logout-card {
+  text-align: center;
+  padding: 40px;
+}
+
+.logout-button {
+  padding: 10px 30px;
+  cursor: pointer;
+}
