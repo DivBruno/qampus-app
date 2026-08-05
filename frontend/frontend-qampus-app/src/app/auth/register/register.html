@@ -1,6 +1,6 @@
 <div class="main-div">
     <header class="header">
-        <h1 style="padding-left: 50px;">QAmpus</h1>
+        <h1 style="padding-left: 50px;">Qampus</h1>
     </header>
     <div class="container">
         <form [formGroup]="registerForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
@@ -50,5 +50,9 @@
             <br>
             <button type="submit" class="button">Registrar</button>
         </form>
+        <br>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <a (click)="goTo('login')" href="">Voltar</a>
+        </div>
     </div>
 </div>

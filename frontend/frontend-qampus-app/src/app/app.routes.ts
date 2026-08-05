@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { Login } from './auth/login/login';
-import { Logout } from './logout/logout';
+import { Logout } from './auth/logout/logout';
 import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
+import { authGuard } from './auth/auth-guard';
 
 export const routes: Routes = [
   {
@@ -11,7 +12,8 @@ export const routes: Routes = [
   },
   {
     path: 'logout',
-    component: Logout
+    component: Logout,
+    canActivate: [authGuard],
   },
   {
     path: 'registrar',
@@ -20,5 +22,10 @@ export const routes: Routes = [
   {
     path: 'unauthorized',
     component: Unauthorized
+  },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
   }
 ];

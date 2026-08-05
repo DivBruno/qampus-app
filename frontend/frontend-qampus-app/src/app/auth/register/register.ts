@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { User } from '../user';
 import { AuthService } from '../auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,8 @@ import { AuthService } from '../auth-service';
 })
 export class Register {
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ){}
   submitClicked: boolean = false;
   registerForm = new FormGroup({
@@ -22,7 +24,9 @@ export class Register {
     confirmPassword: new FormControl('', Validators.required),
     role: new FormControl('', Validators.required)
   })
-
+  goTo(rota: string){
+    this.router.navigate([rota])
+  }
   submit(){
     this.submitClicked = true;
     if(this.registerForm.valid){
