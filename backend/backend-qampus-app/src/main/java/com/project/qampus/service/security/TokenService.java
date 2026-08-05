@@ -29,10 +29,9 @@ public class TokenService {
         }
     }
 
+    // Coloquei 720 horas pra duração do token, pode ser alterado
     private Instant GenerateExpirationDate(){
-        return ZonedDateTime
-                .now(ZoneId.of("America/Sao_Paulo"))
-                .toInstant();
+        return LocalDateTime.now().plusHours(720).toInstant(ZoneOffset.of("-03:00"));
     }
 
     public String validateToken(String token){
