@@ -18,7 +18,7 @@ export class Register {
   ){}
   submitClicked: boolean = false;
   registerForm = new FormGroup({
-    nome: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
     confirmPassword: new FormControl('', Validators.required),
@@ -27,16 +27,21 @@ export class Register {
   goTo(rota: string){
     this.router.navigate([rota])
   }
-  submit(){
+  async submit(){
     this.submitClicked = true;
     if(this.registerForm.valid){
       const user: User = {
-        nome: this.registerForm.value.nome!,
+        name: this.registerForm.value.name!,
         email: this.registerForm.value.email!,
         password: this.registerForm.value.password!,
         role: this.registerForm.value.role!
       }
-      this.authService.register(user);
+      const response = await this.authService.register(user);
+      if(response){
+        this.router.navigate(['home']);
+      }else{
+        alert("Já existe uma conta cadastrada com este email.");
+      }
     }
   }
 }

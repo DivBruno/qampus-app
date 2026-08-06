@@ -19,9 +19,12 @@ export class Login {
   ) {}
 
   async onSubmit() {
-    localStorage.setItem('token', "a");
-    console.log('Email:', this.email);
-    console.log('Senha:', this.password);
+    const sucesso = await this.authService.login(this.email, this.password);
+    if(sucesso){
+      this.router.navigate(["home"]);
+    }else{
+      alert("Email ou Senha Inválidos");
+    }
   }
   goTo(rota: string){
     this.router.navigate([rota]);
