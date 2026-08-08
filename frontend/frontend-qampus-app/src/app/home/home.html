@@ -63,9 +63,18 @@
         class="duvida-card"
         (click)="visualizarDuvida(duvida.id)">
 
-        <div class="answers">
-          <strong>{{ duvida.respostas }}</strong>
-          <span>Respostas</span>
+        <div class="stats">
+
+          <div class="stat">
+            <strong>{{ duvida.votos }}</strong>
+            <span>Votos</span>
+          </div>
+
+          <div class="stat">
+            <strong>{{ duvida.respostas }}</strong>
+            <span>Respostas</span>
+          </div>
+
         </div>
 
         <div class="duvida-content">

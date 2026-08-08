@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth-service';
 interface Duvida {
   id: number;
   titulo: string;
+  votos: number;
   respostas: number;
   tags: string[];
 }
@@ -21,18 +22,21 @@ export class Home {
     {
       id: 1,
       titulo: 'Como funciona a matrícula nas disciplinas?',
+      votos: 12,
       respostas: 4,
       tags: ['CURSO', 'TURMA 1']
     },
     {
       id: 2,
       titulo: 'Quando começam as aulas do próximo período?',
+      votos: 8,
       respostas: 2,
       tags: ['CURSO', 'TURMA 2']
     },
     {
       id: 3,
       titulo: 'Como acessar o material das disciplinas?',
+      votos: 15,
       respostas: 6,
       tags: ['CURSO', 'TURMA 1']
     }
