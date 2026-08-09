@@ -5,6 +5,7 @@ import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { authGuard } from './auth/auth-guard';
 import { Home } from './home/home';
+import { Duvida } from './duvida/duvida';
 
 export const routes: Routes = [
   {
@@ -28,5 +29,12 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  }
+  },
+
+  {
+    path: 'duvida/:id',
+    component: Duvida,
+    canActivate: [authGuard],
+  },
+
 ];
