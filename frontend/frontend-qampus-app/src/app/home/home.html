@@ -1,0 +1,102 @@
+<header class="topbar">
+  <h1>Qampus</h1>
+
+  <div class="profile-area">
+    <div class="profile-icon">
+      ●
+    </div>
+
+    <button
+      type="button"
+      class="logout-button"
+      (click)="logout()">
+      Logout
+    </button>
+  </div>
+</header>
+
+<main class="home-container">
+
+  <section class="home-actions">
+
+    <div class="filters">
+
+      <p class="recent-title">Mais Recentes:</p>
+      <p class="filter-title">Filtradas por interesses:</p>
+
+      <div class="filter-options">
+
+        <label>
+          <input type="checkbox" checked>
+          CURSO
+        </label>
+
+        <label>
+          <input type="checkbox" checked>
+          TURMA 1
+        </label>
+
+        <label>
+          <input type="checkbox" checked>
+          TURMA 2
+        </label>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="question-button"
+      (click)="fazerPergunta()">
+      Fazer Pergunta
+    </button>
+
+  </section>
+
+
+  <section class="duvidas-list">
+
+    @for (duvida of duvidas; track duvida.id) {
+
+      <article
+        class="duvida-card"
+        (click)="visualizarDuvida(duvida.id)">
+
+        <div class="stats">
+
+          <div class="stat">
+            <strong>{{ duvida.votos }}</strong>
+            <span>Votos</span>
+          </div>
+
+          <div class="stat">
+            <strong>{{ duvida.respostas }}</strong>
+            <span>Respostas</span>
+          </div>
+
+        </div>
+
+        <div class="duvida-content">
+
+          <h2>{{ duvida.titulo }}</h2>
+
+          <div class="tags">
+
+            @for (tag of duvida.tags; track tag) {
+              <span class="tag">
+                {{ tag }}
+              </span>
+            }
+
+          </div>
+
+        </div>
+
+      </article>
+
+    }
+
+  </section>
+
+</main>

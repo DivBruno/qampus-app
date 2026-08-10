@@ -5,6 +5,8 @@ import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { authGuard } from './auth/auth-guard';
 import { CreatePost } from './create-post/create-post';
+import { Home } from './home/home';
+import { Duvida } from './duvida/duvida';
 
 export const routes: Routes = [
   {
@@ -13,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: Logout,
+    component: Home,
     canActivate: [authGuard],
   },
   {
@@ -34,5 +36,11 @@ export const routes: Routes = [
     component: CreatePost,
     canActivate: [authGuard],
 //    data: {role: 'STUDENT'}
-  }
+  },
+  {
+    path: 'duvida/:id',
+    component: Duvida,
+    canActivate: [authGuard],
+  },
+
 ];
