@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth-service';
+import { Navbar } from "../navbar/navbar";
 
 interface Resposta {
   id: number;
@@ -15,7 +15,7 @@ interface DuvidaRelacionada {
 
 @Component({
   selector: 'app-duvida',
-  imports: [],
+  imports: [Navbar],
   templateUrl: './duvida.html',
   styleUrl: './duvida.css',
 })
@@ -76,18 +76,8 @@ export class Duvida {
   ];
 
   constructor(
-    private authService: AuthService,
     private router: Router
   ) {}
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-
-  voltar(): void {
-    this.router.navigate(['/home']);
-  }
 
   votar(valor: number): void {
     this.votos += valor;

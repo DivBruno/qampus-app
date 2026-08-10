@@ -1,22 +1,12 @@
 <div class="main-div">
-    <header class="header">
-        <h1 style="padding-left: 50px;">Qampus</h1>
-        <div class="user-menu">
-            <img src="/user-logo.png" style="cursor: pointer;" width="40" height="40" (click)="toggleMenu()">
-            @if (menuAberto) {
-                <div class="dropdown">
-                    <button (click)="logout()">Deslogar</button>
-                </div>
-            }
-        </div>
-    </header>
+    <app-navbar></app-navbar>
     <div class="container">
-        <form style="display: flex; flex-direction: column;">
-            <b><label>Título</label></b>
-            <input class="input">
+        <form [formGroup]="postForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
+            <b><label for="title">Título</label></b>
+            <input class="input" formControlName="title" id="title">
             <br>
             <div class="tags">
-                @for (tag of tags; track tag) {
+                @for (tag of tagsCriadas; track tag) {
                     <button class="tag-button">
                         {{ tag }}
                     </button>
@@ -36,8 +26,10 @@
                 </div>
             }
             <br>
-            <b><label>Descrição</label></b>
-            <textarea style="height: 383px; resize:none;"></textarea>
+            <b><label for="content">Descrição</label></b>
+            <textarea style="height: 300px; resize:none;" id="content" formControlName="content"></textarea>
+            <br>
+            <button type="submit" class="button">Publicar</button>
         </form>
     </div>
 </div>

@@ -32,7 +32,7 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'post/criar',
+    path: 'duvida/criar',
     component: CreatePost,
     canActivate: [authGuard],
 //    data: {role: 'STUDENT'}

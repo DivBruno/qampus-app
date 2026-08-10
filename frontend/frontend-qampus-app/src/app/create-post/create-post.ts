@@ -1,47 +1,35 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/auth-service';
 import { Router } from '@angular/router';
 import { HostListener } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
+import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Duvida } from '../duvida';
+import { DuvidaService } from '../duvida-service';
+import { AuthService } from '../auth/auth-service';
+import { Navbar } from "../navbar/navbar";
 
 @Component({
   selector: 'app-create-post',
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule, Navbar],
   templateUrl: './create-post.html',
   styleUrl: './create-post.css',
 })
+
 export class CreatePost {
   constructor(
+    private duvidaService: DuvidaService,
     private authService: AuthService,
     private router: Router
   ){}
 
-  menuAberto = false;
   novaTag = false;
   nomeTag = '';
   quantidadeTags = 0;
-  tags: string[] = [];
-  toggleMenu(){
-    this.menuAberto = !this.menuAberto;
-  }
+  tagsCriadas: string[] = [];
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent){
-    const target = event.target as HTMLElement;
-    if(!target.closest('.user-menu')){
-      this.menuAberto = false;
-    }
-  }
-
-  async logout(){
-    const resposta = await this.authService.logout();
-    if(resposta){
-      this.router.navigate(['/login']);
-    }else{
-      alert("Erro ao realizar o logout");
-    }
-  }
+  postForm = new FormGroup({
+    title: new FormControl('', Validators.required),
+    content: new FormControl('', Validators.required)
+  })
 
   abrirNovaTag() {
     this.novaTag = true;
@@ -53,10 +41,29 @@ export class CreatePost {
 
   adicionarTag() {
       if (this.nomeTag.trim() !== '') {
-          this.tags.push(this.nomeTag.trim());
-          console.log(this.nomeTag);
+          this.tagsCriadas.push(this.nomeTag.trim());
           this.nomeTag = '';
           this.novaTag = false;
       }
+  }
+
+  goTo(rota: string){
+    this.router.navigate([rota]);
+  }
+
+  async submit(){
+    if(this.postForm.valid){
+      const duvida: Duvida = {
+        title: this.postForm.value.title!,
+        content: this.postForm.value.content!,
+        tags: this.tagsCriadas
+      }
+      const response = await this.duvidaService.createDuvida(duvida);
+      if(response){
+        this.router.navigate(['home']);
+      }else{
+        alert("Erro ao publicar uma nova dúvida");
+      }
+    }
   }
 }

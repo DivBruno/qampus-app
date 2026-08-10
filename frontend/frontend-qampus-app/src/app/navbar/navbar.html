@@ -1,0 +1,11 @@
+<header class="header">
+    <h1 style="padding-left: 50px; cursor: pointer;" (click)="goTo('home')">Qampus</h1>
+    <div class="user-menu">
+        <img src="/user-logo.png" style="cursor: pointer;" width="40" height="40" (click)="toggleMenu()">
+        @if (menuAberto) {
+            <div class="dropdown">
+                <button (click)="logout()">Deslogar</button>
+            </div>
+        }
+    </div>
+</header>
