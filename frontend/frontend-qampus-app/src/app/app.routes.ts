@@ -4,6 +4,7 @@ import { Logout } from './auth/logout/logout';
 import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { authGuard } from './auth/auth-guard';
+import { CreatePost } from './create-post/create-post';
 
 export const routes: Routes = [
   {
@@ -27,5 +28,11 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
+  },
+  {
+    path: 'post/criar',
+    component: CreatePost,
+    canActivate: [authGuard],
+//    data: {role: 'STUDENT'}
   }
 ];
