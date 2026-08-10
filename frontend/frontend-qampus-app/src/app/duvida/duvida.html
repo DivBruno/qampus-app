@@ -1,0 +1,121 @@
+<header class="topbar">
+
+  <h1>Qampus</h1>
+
+  <div class="profile-area">
+
+    <div class="profile-icon">
+      ●
+    </div>
+
+    <button
+      type="button"
+      class="logout-button"
+      (click)="logout()">
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="duvida-container">
+
+  <section class="main-content">
+
+    <div class="question">
+
+      <div class="vote-area">
+
+        <button
+          type="button"
+          class="vote-button"
+          (click)="votar(1)">
+          △
+        </button>
+
+        <span class="vote-count">
+          {{ votos }}
+        </span>
+
+        <button
+          type="button"
+          class="vote-button"
+          (click)="votar(-1)">
+          ▽
+        </button>
+
+      </div>
+
+
+      <div class="question-content">
+
+        <h2>{{ titulo }}</h2>
+
+        <div class="tags">
+
+          @for (tag of tags; track $index) {
+            <span class="tag">
+              {{ tag }}
+            </span>
+          }
+
+        </div>
+
+
+        <p class="descricao">
+          {{ descricao }}
+        </p>
+
+
+        <section class="respostas">
+
+          @for (resposta of respostas; track resposta.id) {
+
+            <article class="resposta">
+
+              <strong>Resposta:</strong>
+
+              <p>
+                {{ resposta.texto }}
+              </p>
+
+            </article>
+
+          }
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <aside class="relacionadas">
+
+    <h3>Relacionadas:</h3>
+
+    @for (duvida of relacionadas; track duvida.id) {
+
+      <div
+        class="relacionada"
+        (click)="visualizarRelacionada(duvida.id)">
+
+        <span class="related-votes">
+          {{ duvida.votos }}
+        </span>
+
+        <span class="related-title">
+          {{ duvida.titulo }}
+        </span>
+
+      </div>
+
+    }
+
+  </aside>
+
+</main>
