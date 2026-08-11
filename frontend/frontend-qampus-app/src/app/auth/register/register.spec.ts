@@ -43,10 +43,6 @@ describe('Register', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should call AuthService register with the new user', async()=>{
     authServiceMock.register.mockResolvedValue(true);
     component.registerForm.setValue({

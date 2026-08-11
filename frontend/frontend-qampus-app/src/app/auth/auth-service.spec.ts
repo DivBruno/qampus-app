@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth-service';
 import { vi } from 'vitest';
 import { User } from './user';
-import * as jwtDecodeModule from 'jwt-decode';
 
 describe('AuthService', () => {
   let service: AuthService;

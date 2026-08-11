@@ -17,12 +17,8 @@ export class Navbar {
   ){}
 
   menuAberto = false;
-  novaTag = false;
-  nomeTag = '';
-  quantidadeTags = 0;
-  tagsCriadas: string[] = [];
-
-    toggleMenu(){
+  
+  toggleMenu(){
     this.menuAberto = !this.menuAberto;
   }
 
