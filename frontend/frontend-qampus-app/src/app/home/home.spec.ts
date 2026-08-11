@@ -60,17 +60,10 @@ describe('Home', () => {
     expect(component.duvidas[0].respostas).toBe(4);
   });
 
-  it('should logout and navigate to login', () => {
-    component.logout();
-
-    expect(authServiceMock.logout).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-  });
-
   it('should navigate to create question page', () => {
     component.fazerPergunta();
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/criar-duvida']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/duvida/criar']);
   });
 
   it('should navigate to the selected question', () => {

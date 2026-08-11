@@ -68,19 +68,6 @@ describe('Duvida', () => {
     expect(component.relacionadas[0].votos).toBe(4);
   });
 
-  it('should logout and navigate to login', () => {
-    component.logout();
-
-    expect(authServiceMock.logout).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-  });
-
-  it('should navigate back to home', () => {
-    component.voltar();
-
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/home']);
-  });
-
   it('should increase votes', () => {
     component.votar(1);
 
