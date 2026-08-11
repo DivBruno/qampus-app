@@ -12,6 +12,6 @@ export class Unauthorized {
     private router: Router
   ){}
   goTo(rota: string){
-    this.router.navigate(["/"+rota]);
+    this.router.navigate([rota]);
   }
 }

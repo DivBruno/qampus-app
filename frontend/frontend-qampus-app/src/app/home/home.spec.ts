@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
-import { AuthService } from '../auth/auth-service';
 import { Router } from '@angular/router';
 import { vi } from 'vitest';
 
@@ -8,19 +7,11 @@ describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
 
-  let authServiceMock: {
-    logout: ReturnType<typeof vi.fn>;
-  };
-
   let routerMock: {
     navigate: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
-    authServiceMock = {
-      logout: vi.fn(),
-    };
-
     routerMock = {
       navigate: vi.fn(),
     };
@@ -28,10 +19,6 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
-        {
-          provide: AuthService,
-          useValue: authServiceMock,
-        },
         {
           provide: Router,
           useValue: routerMock,
@@ -60,17 +47,10 @@ describe('Home', () => {
     expect(component.duvidas[0].respostas).toBe(4);
   });
 
-  it('should logout and navigate to login', () => {
-    component.logout();
-
-    expect(authServiceMock.logout).toHaveBeenCalled();
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-  });
-
   it('should navigate to create question page', () => {
     component.fazerPergunta();
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/criar-duvida']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/duvida/criar']);
   });
 
   it('should navigate to the selected question', () => {
