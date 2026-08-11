@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { Login } from './auth/login/login';
-import { Logout } from './auth/logout/logout';
 import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { authGuard } from './auth/auth-guard';
+import { CreatePost } from './create-post/create-post';
 import { Home } from './home/home';
 import { Duvida } from './duvida/duvida';
 
@@ -30,7 +30,12 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-
+  {
+    path: 'duvida/criar',
+    component: CreatePost,
+    canActivate: [authGuard],
+//    data: {role: 'STUDENT'}
+  },
   {
     path: 'duvida/:id',
     component: Duvida,

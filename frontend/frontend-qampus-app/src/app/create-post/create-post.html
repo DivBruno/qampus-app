@@ -1,0 +1,35 @@
+<div class="main-div">
+    <app-navbar></app-navbar>
+    <div class="container">
+        <form [formGroup]="postForm" style="display: flex; flex-direction: column;" (ngSubmit)="submit()">
+            <b><label for="title">Título</label></b>
+            <input class="input" formControlName="title" id="title">
+            <br>
+            <div class="tags">
+                @for (tag of tagsCriadas; track tag) {
+                    <button class="tag-button">
+                        {{ tag }}
+                    </button>
+                }
+                <button class="plus-button" (click)="abrirNovaTag()">
+                    <img src="/plus.png" height="25" width="25">
+                </button>
+            </div>
+            @if (novaTag) {
+                <br>
+                <div class="tag-input">
+                    <input class="input" style="flex: 1;" type="text" [(ngModel)]="nomeTag" [ngModelOptions]="{standalone: true}">
+                    <div class="tag-buttons">
+                        <button class="button" (click)="adicionarTag()">Adicionar</button>
+                        <button class="button" (click)="fecharNovaTag()">Cancelar</button>
+                    </div>
+                </div>
+            }
+            <br>
+            <b><label for="content">Descrição</label></b>
+            <textarea style="height: 300px; resize:none;" id="content" formControlName="content"></textarea>
+            <br>
+            <button type="submit" class="button">Publicar</button>
+        </form>
+    </div>
+</div>

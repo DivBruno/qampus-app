@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth-service';
+import { Navbar } from "../navbar/navbar";
 
 interface Duvida {
   id: number;
@@ -12,7 +12,7 @@ interface Duvida {
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [Navbar],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -43,17 +43,11 @@ export class Home {
   ];
 
   constructor(
-    private authService: AuthService,
     private router: Router
   ) {}
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-
   fazerPergunta(): void {
-    this.router.navigate(['/criar-duvida']);
+    this.router.navigate(['/duvida/criar']);
   }
 
   visualizarDuvida(id: number): void {
