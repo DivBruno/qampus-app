@@ -17,7 +17,6 @@ export class DuvidaService {
         },
         body: JSON.stringify(duvida)
       })
-      console.log(await response.json());
       return response.ok;
     }catch(error){
       console.error('Error creating new Post: ', error);
