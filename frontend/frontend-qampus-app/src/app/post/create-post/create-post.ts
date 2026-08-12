@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../auth/auth-service';
-import { Navbar } from "../navbar/navbar";
-import { PostService, NewPost } from '../post/post-service';
+import { AuthService } from '../../auth/auth-service';
+import { Navbar } from "../../navbar/navbar";
+import { PostService, NewPost } from '../post-service';
 
 @Component({
   selector: 'app-create-post',

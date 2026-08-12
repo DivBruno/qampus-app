@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
 import { Router } from '@angular/router';
-import { PostService, Post } from '../post/post-service';
+import { PostService, Post } from '../post-service';
 import { vi } from 'vitest';
 
 describe('Home', () => {

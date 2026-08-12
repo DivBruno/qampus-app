@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { vi } from 'vitest';
 
 import { Duvida } from './duvida';
-import { Post, PostService } from '../post/post-service';
+import { Post, PostService } from '../post-service';
 
 describe('Duvida', () => {
   let component: Duvida;

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PostService, NewPost } from '../post/post-service';
+import { PostService, NewPost } from '../post-service';
 import { CreatePost } from './create-post';
 import { Router } from '@angular/router';
 

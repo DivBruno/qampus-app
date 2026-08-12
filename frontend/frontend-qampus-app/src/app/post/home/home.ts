@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth-service';
-import { PostService, Post } from '../post/post-service';
-import { Navbar } from "../navbar/navbar";
+import { AuthService } from '../../auth/auth-service';
+import { PostService, Post } from '../post-service';
+import { Navbar } from "../../navbar/navbar";
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -25,7 +25,6 @@ export class Home implements OnInit{
   async ngOnInit() {
     try {
       this.duvidas = await this.postService.findAll();
-      console.log('duvidas carregadas')
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar dúvidas:', error);

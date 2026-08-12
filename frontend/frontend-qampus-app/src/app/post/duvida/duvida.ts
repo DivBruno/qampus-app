@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Navbar } from '../navbar/navbar';
-import { Post, PostService } from '../post/post-service';
+import { Navbar } from '../../navbar/navbar';
+import { Post, PostService } from '../post-service';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({

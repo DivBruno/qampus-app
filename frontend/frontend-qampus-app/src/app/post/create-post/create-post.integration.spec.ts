@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreatePost } from './create-post';
-import { PostService, NewPost } from '../post/post-service';
+import { PostService, NewPost } from '../post-service';
 import { Router } from '@angular/router';
 
 describe('CreatePost', () => {
