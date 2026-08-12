@@ -21,6 +21,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("qampus-app")
                     .withSubject(user.getEmail())
+                    .withClaim("role", user.getRole().name())
                     .withExpiresAt(GenerateExpirationDate())
                     .sign(algorithm);
             return token;
