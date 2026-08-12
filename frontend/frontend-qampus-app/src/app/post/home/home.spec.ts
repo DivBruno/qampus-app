@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
 import { Router } from '@angular/router';
-import { PostService, Post } from '../post/post-service';
+import { PostService, Post } from '../post-service';
 import { vi } from 'vitest';
 
 describe('Home', () => {
@@ -112,12 +112,12 @@ describe('Home', () => {
   it('should navigate to create question page', () => {
     component.fazerPergunta();
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/criar-duvida']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/post/criar']);
   });
 
   it('should navigate to the selected question', () => {
     component.visualizarDuvida('2');
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/duvida', '2']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/post', '2']);
   });
 });

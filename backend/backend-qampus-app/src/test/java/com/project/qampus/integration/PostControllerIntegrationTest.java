@@ -38,7 +38,7 @@ class PostControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private PostRepository questionRepository;
+    private PostRepository postRepository;
 
     @Autowired
     private TagRepository tagRepository;
@@ -53,7 +53,7 @@ class PostControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        questionRepository.deleteAll();
+        postRepository.deleteAll();
         tagRepository.deleteAll();
         userRepository.deleteAll();
 
@@ -91,7 +91,7 @@ class PostControllerIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Dúvida sobre Spring Boot"))
                 .andExpect(jsonPath("$.content").value("Como configurar testes de integração?"));
 
-        assertEquals(1, questionRepository.count());
+        assertEquals(1, postRepository.count());
     }
 
     @Test

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class PostServiceTest {
 
     @Mock
-    private PostRepository questionRepository;
+    private PostRepository postRepository;
 
     @Mock
     private TagService tagService;
@@ -44,7 +44,7 @@ class PostServiceTest {
         when(tagService.resolveTags(postDTO.tags())).thenReturn(resolvedTags);
 
         Post savedPost = new Post("post-1", postDTO.title(), postDTO.content(), 0L, 0L, resolvedTags, null);
-        when(questionRepository.save(any(Post.class))).thenReturn(savedPost);
+        when(postRepository.save(any(Post.class))).thenReturn(savedPost);
 
         Post result = postService.create(postDTO);
 
@@ -54,6 +54,6 @@ class PostServiceTest {
         assertEquals(resolvedTags, result.getTags());
 
         verify(tagService, times(1)).resolveTags(postDTO.tags());
-        verify(questionRepository, times(1)).save(any(Post.class));
+        verify(postRepository, times(1)).save(any(Post.class));
     }
 }

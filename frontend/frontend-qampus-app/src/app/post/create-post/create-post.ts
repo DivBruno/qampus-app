@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HostListener } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Duvida } from '../duvida';
-import { DuvidaService } from '../duvida-service';
-import { AuthService } from '../auth/auth-service';
-import { Navbar } from "../navbar/navbar";
+import { AuthService } from '../../auth/auth-service';
+import { Navbar } from "../../navbar/navbar";
+import { PostService, NewPost } from '../post-service';
 
 @Component({
   selector: 'app-create-post',
@@ -16,7 +14,7 @@ import { Navbar } from "../navbar/navbar";
 
 export class CreatePost {
   constructor(
-    private duvidaService: DuvidaService,
+    private postService: PostService,
     private authService: AuthService,
     private router: Router
   ){}
@@ -53,12 +51,12 @@ export class CreatePost {
 
   async submit(){
     if(this.postForm.valid){
-      const duvida: Duvida = {
+      const post: NewPost = {
         title: this.postForm.value.title!,
         content: this.postForm.value.content!,
         tags: this.tagsCriadas
       }
-      const response = await this.duvidaService.createDuvida(duvida);
+      const response = await this.postService.createPost(post);
       if(response){
         this.router.navigate(['home']);
       }else{

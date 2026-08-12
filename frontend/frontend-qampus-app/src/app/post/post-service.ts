@@ -15,6 +15,12 @@ export interface Post {
   createdAt: string;
 }
 
+export interface NewPost{
+  title: string,
+  content: string,
+  tags: string[]
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +32,8 @@ export class PostService {
     const response = await fetch(this.apiUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem('token')
       }
     });
 
@@ -37,11 +44,28 @@ export class PostService {
     return await response.json();
   }
 
+  async createPost(post: NewPost){
+    try{
+      const response = await fetch(this.apiUrl+"/create", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('token')
+        },
+        body: JSON.stringify(post)
+      })
+      return response.ok;
+    }catch(error){
+      console.error("Error creating new Post: ", error);
+      return false;
+    }
+  }
   async findById(id: string): Promise<Post> {
     const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem('token')
       }
     });
 

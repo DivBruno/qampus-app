@@ -46,6 +46,7 @@
 .question-button {
   background-color: #333333;
   color: white;
+  margin-left: auto;
 
   border: none;
   border-radius: 5px;

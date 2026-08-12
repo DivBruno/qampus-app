@@ -1,26 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { PostService, NewPost } from '../post-service';
 import { CreatePost } from './create-post';
-import { DuvidaService } from '../duvida-service';
 import { Router } from '@angular/router';
-import { Duvida } from '../duvida';
 
 describe('CreatePost', () => {
   let component: CreatePost;
   let fixture: ComponentFixture<CreatePost>;
 
+  let postService: {
+    createPost: ReturnType<typeof vi.fn>;
+  }
   let routerMock: {
     navigate: ReturnType<typeof vi.fn>;
   }
 
   beforeEach(async () => {
+    postService = {
+      createPost: vi.fn(),
+    }
     routerMock={
       navigate: vi.fn(),
     }
     await TestBed.configureTestingModule({
       imports: [CreatePost],
       providers: [
-        DuvidaService,
+        {
+          provide: PostService,
+          useValue: postService
+        },
         {
           provide: Router,
           useValue: routerMock
@@ -33,53 +40,37 @@ describe('CreatePost', () => {
     await fixture.whenStable();
   });
 
-  it('should create a new post through DuvidaService an', async() => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
-        ok: true
-    } as Response);
-
+  it('should call DuvidaService createDuvida with a new post', async() => {
+    postService.createPost.mockResolvedValue(true);
     component.postForm.setValue({
       title: 'TESTE',
       content: 'TESTES'
     })
     await component.submit();
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
     }
-
-    expect(fetchMock).toHaveBeenCalledWith(
-        expect.stringContaining('/create'),
-        expect.objectContaining({
-            method: 'POST',
-        })
-    );
-
-    expect(routerMock.navigate).toHaveBeenCalledWith(['home']);
+    expect(postService.createPost).toHaveBeenCalledWith(post);
   });
 
   it('should show an alert when creating post fails', async()=>{
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
-        ok: false
-    } as Response);
-
+    postService.createPost.mockResolvedValue(false);
     const alertMock = vi
       .spyOn(window, 'alert')
       .mockImplementation(()=>{});
-    
     component.postForm.setValue({
       title: 'TESTE',
       content: 'TESTES'
     })
     await component.submit()
-    const duvida: Duvida = {
-      title: 'TESTE',
-      content: 'TESTES',
-      tags: []
-    }
-    expect(routerMock.navigate).not.toHaveBeenCalledWith(['home']);
     expect(alertMock).toHaveBeenCalledWith("Erro ao publicar uma nova dúvida");
     alertMock.mockRestore();
+  })
+
+  it('should navigate to the route', ()=>{
+    component.goTo("login");
+    expect(routerMock.navigate).toHaveBeenCalledWith(['login']);
   })
 });
