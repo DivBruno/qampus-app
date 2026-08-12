@@ -1,56 +1,43 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Navbar } from "../navbar/navbar";
-
-interface Duvida {
-  id: number;
-  titulo: string;
-  votos: number;
-  respostas: number;
-  tags: string[];
-}
+import { AuthService } from '../auth/auth-service';
+import { PostService, Post } from '../post/post-service';
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar],
+  imports: [],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
 
-  duvidas: Duvida[] = [
-    {
-      id: 1,
-      titulo: 'Como funciona a matrícula nas disciplinas?',
-      votos: 12,
-      respostas: 4,
-      tags: ['CURSO', 'TURMA 1']
-    },
-    {
-      id: 2,
-      titulo: 'Quando começam as aulas do próximo período?',
-      votos: 8,
-      respostas: 2,
-      tags: ['CURSO', 'TURMA 2']
-    },
-    {
-      id: 3,
-      titulo: 'Como acessar o material das disciplinas?',
-      votos: 15,
-      respostas: 6,
-      tags: ['CURSO', 'TURMA 1']
-    }
-  ];
+  duvidas: Post[] = [];
 
   constructor(
-    private router: Router
+    private authService: AuthService,
+    private router: Router,
+    private postService: PostService
   ) {}
 
-  fazerPergunta(): void {
-    this.router.navigate(['/duvida/criar']);
+  async ngOnInit() {
+    try {
+      this.duvidas = await this.postService.findAll();
+    } catch (error) {
+      console.error('Erro ao carregar dúvidas:', error);
+      alert('Erro ao carregar dúvidas');
+    }
   }
 
-  visualizarDuvida(id: number): void {
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
+  fazerPergunta(): void {
+    this.router.navigate(['/criar-duvida']);
+  }
+
+  visualizarDuvida(id: string): void {
     this.router.navigate(['/duvida', id]);
   }
 }
