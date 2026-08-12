@@ -36,4 +36,19 @@ export class PostService {
 
     return await response.json();
   }
+
+  async findById(id: string): Promise<Post> {
+    const response = await fetch(`${this.apiUrl}/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao buscar dúvida');
+    }
+
+    return await response.json();
+  }
 }

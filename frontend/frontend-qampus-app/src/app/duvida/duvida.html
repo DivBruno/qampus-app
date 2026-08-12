@@ -1,76 +1,64 @@
 <app-navbar></app-navbar>
 
-
 <main class="duvida-container">
 
   <section class="main-content">
 
-    <div class="question">
+    @if (post) {
 
-      <div class="vote-area">
+      <div class="question">
 
-        <button
-          type="button"
-          class="vote-button"
-          (click)="votar(1)">
-          △
-        </button>
+        <div class="vote-area">
 
-        <span class="vote-count">
-          {{ votos }}
-        </span>
+          <button
+            type="button"
+            class="vote-button"
+            (click)="votar(1)">
+            △
+          </button>
 
-        <button
-          type="button"
-          class="vote-button"
-          (click)="votar(-1)">
-          ▽
-        </button>
+          <span class="vote-count">
+            {{ post.upVotes - post.downVotes }}
+          </span>
 
-      </div>
-
-
-      <div class="question-content">
-
-        <h2>{{ titulo }}</h2>
-
-        <div class="tags">
-
-          @for (tag of tags; track $index) {
-            <span class="tag">
-              {{ tag }}
-            </span>
-          }
+          <button
+            type="button"
+            class="vote-button"
+            (click)="votar(-1)">
+            ▽
+          </button>
 
         </div>
 
 
-        <p class="descricao">
-          {{ descricao }}
-        </p>
+        <div class="question-content">
+
+          <h2>{{ post.title }}</h2>
+
+          <div class="tags">
+
+            @for (tag of post.tags; track tag.id) {
+              <span class="tag">
+                {{ tag.name }}
+              </span>
+            }
+
+          </div>
 
 
-        <section class="respostas">
+          <p class="descricao">
+            {{ post.content }}
+          </p>
 
-          @for (resposta of respostas; track resposta.id) {
-
-            <article class="resposta">
-
-              <strong>Resposta:</strong>
-
-              <p>
-                {{ resposta.texto }}
-              </p>
-
-            </article>
-
-          }
-
-        </section>
+        </div>
 
       </div>
 
-    </div>
+    } @else {
+
+      <p>Carregando dúvida...</p>
+
+    }
 
   </section>
 
@@ -79,23 +67,8 @@
 
     <h3>Relacionadas:</h3>
 
-    @for (duvida of relacionadas; track duvida.id) {
-
-      <div
-        class="relacionada"
-        (click)="visualizarRelacionada(duvida.id)">
-
-        <span class="related-votes">
-          {{ duvida.votos }}
-        </span>
-
-        <span class="related-title">
-          {{ duvida.titulo }}
-        </span>
-
-      </div>
-
-    }
+    <!-- Será integrado quando o backend disponibilizar
+         os dados de dúvidas relacionadas. -->
 
   </aside>
 
