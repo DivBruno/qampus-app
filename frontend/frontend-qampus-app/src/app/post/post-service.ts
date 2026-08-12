@@ -32,7 +32,8 @@ export class PostService {
     const response = await fetch(this.apiUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem('token')
       }
     });
 
@@ -58,11 +59,13 @@ export class PostService {
       console.error("Error creating new Post: ", error);
       return false;
     }
+  }
   async findById(id: string): Promise<Post> {
     const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem('token')
       }
     });
 

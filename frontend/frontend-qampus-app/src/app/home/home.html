@@ -1,10 +1,6 @@
-<button
-  type="button"
-  class="logout-button"
-  (click)="logout()">
-  Logout
-</button>
+<app-navbar></app-navbar>
 
+<div class="home-container">
 <div class="filters">
 
   <p class="recent-title">Mais Recentes:</p>
@@ -37,7 +33,6 @@
   (click)="fazerPergunta()">
   Fazer Pergunta
 </button>
-
 @for (duvida of duvidas; track duvida.id) {
 
   <article
@@ -72,3 +67,4 @@
   </article>
 
 }
+</div>

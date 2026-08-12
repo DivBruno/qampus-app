@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Navbar } from '../navbar/navbar';
 import { Post, PostService } from '../post/post-service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-duvida',
@@ -16,18 +17,19 @@ export class Duvida implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private postService: PostService
+    private postService: PostService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-
     if (!id) {
       return;
     }
 
     try {
       this.post = await this.postService.findById(id);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar dúvida:', error);
     }

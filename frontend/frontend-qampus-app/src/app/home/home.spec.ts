@@ -112,12 +112,12 @@ describe('Home', () => {
   it('should navigate to create question page', () => {
     component.fazerPergunta();
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/criar-duvida']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/post/criar']);
   });
 
   it('should navigate to the selected question', () => {
     component.visualizarDuvida('2');
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/duvida', '2']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/post', '2']);
   });
 });
