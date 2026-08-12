@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<PostResponseDTO> createPost(@Valid @RequestBody PostDTO body) {
         Post saved = postService.create(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(PostResponseDTO.from(saved));
