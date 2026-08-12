@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.qampus.dto.PostDTO;
 import com.project.qampus.dto.RegisterRequestDTO;
 import com.project.qampus.model.enums.Role;
-import com.project.qampus.repositories.QuestionRepository;
+import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.repositories.TagRepository;
 import com.project.qampus.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class PostControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private PostRepository postRepository;
 
     @Autowired
     private TagRepository tagRepository;
@@ -53,7 +53,7 @@ class PostControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        questionRepository.deleteAll();
+        postRepository.deleteAll();
         tagRepository.deleteAll();
         userRepository.deleteAll();
 
@@ -91,7 +91,7 @@ class PostControllerIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Dúvida sobre Spring Boot"))
                 .andExpect(jsonPath("$.content").value("Como configurar testes de integração?"));
 
-        assertEquals(1, questionRepository.count());
+        assertEquals(1, postRepository.count());
     }
 
     @Test

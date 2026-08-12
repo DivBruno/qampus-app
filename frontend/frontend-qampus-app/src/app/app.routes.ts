@@ -31,13 +31,13 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'duvida/criar',
+    path: 'post/criar',
     component: CreatePost,
     canActivate: [authGuard],
 //    data: {role: 'STUDENT'}
   },
   {
-    path: 'duvida/:id',
+    path: 'post/:id',
     component: Duvida,
     canActivate: [authGuard],
   },

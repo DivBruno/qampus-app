@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CreatePost } from './create-post';
-import { DuvidaService } from '../duvida-service';
+import { PostService, NewPost } from '../post/post-service';
 import { Router } from '@angular/router';
-import { Duvida } from '../duvida';
 
 describe('CreatePost', () => {
   let component: CreatePost;
@@ -20,7 +18,7 @@ describe('CreatePost', () => {
     await TestBed.configureTestingModule({
       imports: [CreatePost],
       providers: [
-        DuvidaService,
+        PostService,
         {
           provide: Router,
           useValue: routerMock
@@ -43,7 +41,7 @@ describe('CreatePost', () => {
       content: 'TESTES'
     })
     await component.submit();
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
@@ -73,7 +71,7 @@ describe('CreatePost', () => {
       content: 'TESTES'
     })
     await component.submit()
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
