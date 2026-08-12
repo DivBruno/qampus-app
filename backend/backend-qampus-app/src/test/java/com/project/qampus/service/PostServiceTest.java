@@ -3,7 +3,7 @@ package com.project.qampus.service;
 import com.project.qampus.dto.PostDTO;
 import com.project.qampus.model.Post;
 import com.project.qampus.model.Tag;
-import com.project.qampus.repositories.QuestionRepository;
+import com.project.qampus.repositories.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class PostServiceTest {
 
     @Mock
-    private QuestionRepository questionRepository;
+    private PostRepository questionRepository;
 
     @Mock
     private TagService tagService;
