@@ -7,11 +7,12 @@
             <br>
             <div class="tags">
                 @for (tag of tagsCriadas; track tag) {
-                    <button class="tag-button">
+                    <button type="button" class="tag-button">
                         {{ tag }}
+                        <img src="/close.png" height="15" width="15" style="padding-left: 2px;" (click)="removeTag(tag)">
                     </button>
                 }
-                <button class="plus-button" (click)="abrirNovaTag()">
+                <button class="plus-button" (click)="abrirFecharTag()">
                     <img src="/plus.png" height="25" width="25">
                 </button>
             </div>
@@ -21,7 +22,7 @@
                     <input class="input" style="flex: 1;" type="text" [(ngModel)]="nomeTag" [ngModelOptions]="{standalone: true}">
                     <div class="tag-buttons">
                         <button class="button" (click)="adicionarTag()">Adicionar</button>
-                        <button class="button" (click)="fecharNovaTag()">Cancelar</button>
+                        <button class="button" (click)="abrirFecharTag()">Cancelar</button>
                     </div>
                 </div>
             }
@@ -29,7 +30,7 @@
             <b><label for="content">Descrição</label></b>
             <textarea style="height: 300px; resize:none;" id="content" formControlName="content"></textarea>
             <br>
-            <button type="submit" class="button">Publicar</button>
+            <button type="submit" class="button">{{text}}</button>
         </form>
     </div>
 </div>
