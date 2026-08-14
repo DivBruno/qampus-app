@@ -21,6 +21,13 @@ export interface NewPost{
   tags: string[]
 }
 
+export interface EditPost{
+  id: string,
+  title: string,
+  content: string,
+  tags: string[]
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,6 +67,7 @@ export class PostService {
       return false;
     }
   }
+
   async findById(id: string): Promise<Post> {
     const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'GET',
@@ -74,5 +82,9 @@ export class PostService {
     }
 
     return await response.json();
+  }
+
+  async editPost(post: EditPost){
+    return true;
   }
 }

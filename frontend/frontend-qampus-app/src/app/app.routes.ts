@@ -43,4 +43,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: {role: 'STUDENT'}
   },
+  {
+    path: 'post/editar/:id',
+    component: CreatePost,
+    canActivate: [authGuard],
+    data: {role: 'STUDENT'}
+  }
 ];

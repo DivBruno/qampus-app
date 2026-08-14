@@ -47,6 +47,9 @@ export class Duvida implements OnInit {
     }
   }
 
+  editarDuvida(){
+    this.router.navigate(['/post/editar', this.post?.id]);
+  }
   visualizarRelacionada(id: string): void {
     this.router.navigate(['/duvida', id]);
   }

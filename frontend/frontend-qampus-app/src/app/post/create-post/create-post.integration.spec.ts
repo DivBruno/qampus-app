@@ -1,11 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreatePost } from './create-post';
 import { PostService, NewPost } from '../post-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 describe('CreatePost', () => {
   let component: CreatePost;
   let fixture: ComponentFixture<CreatePost>;
+
+  const activatedRouteMock = {
+    snapshot: {
+      paramMap: {
+        get: vi.fn()
+      }
+    }
+  };
 
   let routerMock: {
     navigate: ReturnType<typeof vi.fn>;
@@ -22,6 +30,10 @@ describe('CreatePost', () => {
         {
           provide: Router,
           useValue: routerMock
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteMock
         }
       ]
     }).compileComponents();
@@ -32,6 +44,7 @@ describe('CreatePost', () => {
   });
 
   it('should create a new post through DuvidaService an', async() => {
+    activatedRouteMock.snapshot.paramMap.get.mockReturnValue(null);
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
         ok: true
     } as Response);
@@ -40,7 +53,7 @@ describe('CreatePost', () => {
       title: 'TESTE',
       content: 'TESTES'
     })
-    await component.submit();
+    await component.criarPost();
     const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
@@ -70,7 +83,7 @@ describe('CreatePost', () => {
       title: 'TESTE',
       content: 'TESTES'
     })
-    await component.submit()
+    await component.criarPost()
     const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
