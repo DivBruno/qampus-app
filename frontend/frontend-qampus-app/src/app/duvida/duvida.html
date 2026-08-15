@@ -50,6 +50,24 @@
             {{ post.content }}
           </p>
 
+          <div class="responder-area">
+
+            <h3>Responder dúvida</h3>
+
+            <textarea
+              [(ngModel)]="novaResposta"
+              placeholder="Escreva sua resposta..."
+              rows="5">
+            </textarea>
+
+            <button
+              type="button"
+              (click)="responder()">
+              Responder
+            </button>
+
+          </div>
+
         </div>
 
       </div>

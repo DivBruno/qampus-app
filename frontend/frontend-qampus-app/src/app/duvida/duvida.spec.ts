@@ -125,4 +125,28 @@ describe('Duvida', () => {
       '3'
     ]);
   });
+
+  it('should not allow an empty response', () => {
+    component.novaResposta = '   ';
+
+    component.responder();
+
+    expect(component.novaResposta).toBe('   ');
+  });
+
+  it('should clear the response after a valid answer', () => {
+    component.novaResposta = 'Essa é uma resposta válida.';
+
+    component.responder();
+
+    expect(component.novaResposta).toBe('');
+  });
+
+  it('should accept a response with surrounding spaces', () => {
+    component.novaResposta = '  Resposta válida  ';
+
+    component.responder();
+
+    expect(component.novaResposta).toBe('');
+  });
 });
