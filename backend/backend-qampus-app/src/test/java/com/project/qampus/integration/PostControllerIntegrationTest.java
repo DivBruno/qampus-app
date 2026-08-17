@@ -82,7 +82,7 @@ class PostControllerIntegrationTest {
     void shouldCreatePostSuccessfullyWithValidJwtToken() throws Exception {
         PostDTO postDTO = new PostDTO("Dúvida sobre Spring Boot", "Como configurar testes de integração?", Set.of("spring", "junit"));
 
-        mockMvc.perform(post("/question/create")
+        mockMvc.perform(post("/post/create")
                         .header("Authorization", "Bearer " + validToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDTO)))
