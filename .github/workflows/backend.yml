@@ -1,0 +1,55 @@
+name: Backend Spring Boot CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/backend-qampus-app/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/backend-qampus-app/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/backend-qampus-app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Gerar relatório de qualidade (Checkstyle)
+        run: mvn -B checkstyle:checkstyle
+
+      - name: Executar testes com perfil de teste
+        run: mvn -B test -Dspring.profiles.active=test
+
+      - name: Fazer build
+        run: mvn -B clean package -DskipTests
+
+      - name: Gerar relatório de cobertura (JaCoCo)
+        run: mvn -B jacoco:report
+
+      - name: Publicar relatório de qualidade
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: target/site/checkstyle.html
+
+      - name: Publicar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
