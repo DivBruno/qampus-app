@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -18,10 +17,10 @@ import java.util.Set;
 @Setter
 @Getter
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
 
     private String title;
 
@@ -38,6 +37,10 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @CreationTimestamp
     @Column(updatable = false)
