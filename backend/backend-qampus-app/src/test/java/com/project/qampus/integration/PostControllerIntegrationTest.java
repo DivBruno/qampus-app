@@ -57,7 +57,7 @@ class PostControllerIntegrationTest {
         tagRepository.deleteAll();
         userRepository.deleteAll();
 
-        RegisterRequestDTO registerDTO = new RegisterRequestDTO("Professor Teste", "prof@qampus.com", "senha123", Role.PROFESSOR);
+        RegisterRequestDTO registerDTO = new RegisterRequestDTO("Aluno Teste", "aluno@qampus.com", "senha123", Role.STUDENT);
         MvcResult result = mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDTO)))
