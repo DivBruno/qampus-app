@@ -102,7 +102,7 @@ class PostControllerIntegrationTest {
 
         PostDTO postDTO = new PostDTO("Título após logout", "Conteúdo após logout", Set.of("tag1"));
 
-        mockMvc.perform(post("/question/create")
+        mockMvc.perform(post("/post/create")
                         .header("Authorization", "Bearer " + validToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDTO)))
