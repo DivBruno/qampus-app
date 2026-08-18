@@ -56,11 +56,8 @@ class PostServiceTest {
                 Set.of()
         );
 
-        when(authentication.getName())
-                .thenReturn("leonardo@qampus.com");
-
-        when(userRepository.findByEmail("leonardo@qampus.com"))
-                .thenReturn(Optional.of(user));
+        when(authentication.getPrincipal())
+                .thenReturn(user);
 
         when(tagService.resolveTags(Set.of()))
                 .thenReturn(Set.of());
@@ -81,41 +78,10 @@ class PostServiceTest {
         assertEquals("Conteúdo", result.getContent());
         assertEquals(user, result.getUser());
 
-        verify(authentication).getName();
-        verify(userRepository).findByEmail("leonardo@qampus.com");
+        verify(authentication).getPrincipal();
         verify(tagService).resolveTags(Set.of());
         verify(repository).save(any(Post.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUserNotFound() {
-        PostDTO dto = new PostDTO(
-                "Título",
-                "Conteúdo",
-                Set.of()
-        );
-
-        when(authentication.getName())
-                .thenReturn("naoexiste@qampus.com");
-
-        when(userRepository.findByEmail("naoexiste@qampus.com"))
-                .thenReturn(Optional.empty());
-
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
-                () -> postService.create(dto, authentication)
-        );
-
-        assertEquals(
-                "Usuário não encontrado.",
-                exception.getMessage()
-        );
-
-        verify(userRepository)
-                .findByEmail("naoexiste@qampus.com");
-
-        verify(repository, never())
-                .save(any(Post.class));
+        verifyNoInteractions(userRepository);
     }
 
     @Test
