@@ -30,11 +30,7 @@ public class PostService {
         post.setContent(body.content());
         post.setTags(tagService.resolveTags(body.tags()));
 
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("Usuário não encontrado."));
+        User user = (User) authentication.getPrincipal();
 
         post.setUser(user);
 
@@ -61,11 +57,7 @@ public class PostService {
                 .orElseThrow(() ->
                         new RuntimeException("Post not found... x.x"));
 
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("Usuário não encontrado."));
+        User user = (User) authentication.getPrincipal();
 
         if (!post.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException(
