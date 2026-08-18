@@ -1,4 +1,3 @@
-package com.project.qampus.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.qampus.dto.PostDTO;

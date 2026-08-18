@@ -1,51 +1,53 @@
 package com.project.qampus.service.security;
 
+import com.project.qampus.model.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.project.qampus.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
+
     @Value("${api.security.token.secret}")
     private String secret;
-    public String generateToken(User user){
-        try{
-            Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            String token = JWT.create()
+    public String generateToken(User user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            
+            return JWT.create()
                     .withIssuer("qampus-app")
                     .withSubject(user.getEmail())
                     .withClaim("role", user.getRole().name())
-                    .withExpiresAt(GenerateExpirationDate())
+                    .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
-            return token;
-        }catch(JWTCreationException exception){
-            throw new RuntimeException("Erro ao autenticar");
+                    
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao autenticar", exception);
         }
     }
 
-    // Coloquei 720 horas pra duração do token, pode ser alterado
-    private Instant GenerateExpirationDate(){
+    private Instant generateExpirationDate() {
         return LocalDateTime.now().plusHours(720).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    public String validateToken(String token){
-        try{
+    public String validateToken(String token) {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("qampus-app")
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch(JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             return null;
-
         }
     }
 }
