@@ -7,7 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +19,17 @@ import java.util.Collections;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    TokenService tokenService;
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
+    private final BlacklistedTokenRepository blacklistRepository;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    BlacklistedTokenRepository blacklistRepository;
+    public SecurityFilter(TokenService tokenService, 
+                          UserRepository userRepository, 
+                          BlacklistedTokenRepository blacklistRepository) {
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+        this.blacklistRepository = blacklistRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -37,7 +39,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if (token != null) {
-
             if (blacklistRepository.existsByToken(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
