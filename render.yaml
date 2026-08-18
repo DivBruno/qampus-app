@@ -1,0 +1,40 @@
+databases:
+  - name: qampus-db
+    plan: free
+    region: oregon
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: qampus-backend
+    runtime: docker
+    dockerfilePath: ./backend/backend-qampus-app/Dockerfile
+    dockerContext: ./backend/backend-qampus-app
+    plan: free
+    region: oregon
+    branch: main
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: qampus-db
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: qampus-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: qampus-db
+          property: database
+      - key: DATABASE_USERNAME
+        fromDatabase:
+          name: qampus-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: qampus-db
+          property: password
+      - key: JWT_SECRET
+        sync: false
