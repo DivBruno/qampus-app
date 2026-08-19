@@ -1,10 +1,13 @@
 package com.project.qampus.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.project.qampus.dto.PostDTO;
 import com.project.qampus.model.Post;
 import com.project.qampus.model.User;
+import com.project.qampus.model.Vote;
+import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.repositories.UserRepository;
 
@@ -14,6 +17,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.project.qampus.repositories.VoteRepository;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -21,6 +26,8 @@ public class PostService {
     private final PostRepository repository;
     private final TagService tagService;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
+    private final PostRepository postRepository;
 
     public Post create(PostDTO body, Authentication authentication) {
 
@@ -70,5 +77,56 @@ public class PostService {
         post.setTags(tagService.resolveTags(body.tags()));
 
         return repository.save(post);
+    }
+
+    public Post vote(String postId, VoteType type, User user) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("post não encontrado"));
+
+        Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(user.getId(), post.getId());
+        
+        // Se já existir voto
+        if (existingVote.isPresent()) {
+            Vote vote = existingVote.get();
+
+            // remover voto
+            if (vote.getType() == type) {
+                if (type == VoteType.LIKE) {
+                    post.setUpVotes(post.getUpVotes() - 1);
+                } else {
+                    post.setDownVotes(post.getDownVotes() - 1);
+                }
+                voteRepository.delete(vote);
+            } 
+            // mudar voto
+            else {
+                if (type == VoteType.LIKE) {
+                    post.setUpVotes(post.getUpVotes() + 1);
+                    post.setDownVotes(post.getDownVotes() - 1);
+                } else {
+                    post.setDownVotes(post.getDownVotes() + 1);
+                    post.setUpVotes(post.getUpVotes() - 1);
+                }
+                vote.setType(type);
+                voteRepository.save(vote);
+            }
+        } 
+        // se nao votou
+        else {
+            Vote vote = new Vote();
+
+            vote.setUser(user);
+            vote.setPost(post);
+            vote.setType(type);
+
+            voteRepository.save(vote);
+
+            if (type == VoteType.LIKE) {
+                post.setUpVotes(post.getUpVotes() + 1);
+            } 
+            else {
+                post.setDownVotes(post.getDownVotes() + 1);
+            }
+        }
+        return postRepository.save(post);
     }
 }

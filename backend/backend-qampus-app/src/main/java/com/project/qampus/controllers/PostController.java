@@ -3,6 +3,7 @@ package com.project.qampus.controllers;
 import com.project.qampus.dto.PostDTO;
 import com.project.qampus.dto.PostResponseDTO;
 import com.project.qampus.model.Post;
+import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.service.PostService;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import com.project.qampus.model.User;
 
 
 @RestController
@@ -84,5 +88,18 @@ public class PostController {
         return ResponseEntity.ok(
                 PostResponseDTO.from(updated)
         );
+    }
+    
+    
+    @PostMapping("/{id}/upvote")
+    public ResponseEntity<PostResponseDTO> upvote(@PathVariable String id, @AuthenticationPrincipal User user){
+        Post post = postService.vote(id, VoteType.LIKE, user);
+        return ResponseEntity.ok(PostResponseDTO.from(post));
+    }
+
+    @PostMapping("/{id}/downvote")
+    public ResponseEntity<PostResponseDTO> downvote(@PathVariable String id, @AuthenticationPrincipal User user){
+        Post post = postService.vote(id, VoteType.DISLIKE, user);
+        return ResponseEntity.ok(PostResponseDTO.from(post));
     }
 }
