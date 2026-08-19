@@ -116,7 +116,7 @@ class PostServiceTest {
 
         @Test
         void shouldFindPostById() {
-                Post post = new Post();
+                post = new Post();
                 post.setTitle("Meu post");
 
                 when(repository.findById("1"))
