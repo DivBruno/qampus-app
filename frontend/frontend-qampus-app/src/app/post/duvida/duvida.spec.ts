@@ -34,7 +34,9 @@ describe('Duvida', () => {
 
   const postServiceMock = {
     findById: vi.fn(),
-    createAnswer: vi.fn()
+    createAnswer: vi.fn(),
+    upvoteAnswer: vi.fn(),
+    downvoteAnswer: vi.fn()
   };
 
   beforeEach(async () => {
@@ -52,7 +54,29 @@ describe('Duvida', () => {
       content: 'Essa é uma resposta válida.',
       userId: 'user-1',
       postId: '1',
-      createdAt: '2026-08-19T10:00:00'
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    });
+
+    postServiceMock.upvoteAnswer.mockResolvedValue({
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 6,
+      downVotes: 2
+    });
+
+    postServiceMock.downvoteAnswer.mockResolvedValue({
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 3
     });
 
     await TestBed.configureTestingModule({
@@ -179,5 +203,76 @@ describe('Duvida', () => {
     await component.responder();
 
     expect(component.novaResposta).toBe('Resposta válida.');
+  });
+
+  it('should upvote a response', async () => {
+    const resposta = {
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    };
+
+    component.respostas = [resposta];
+
+    await component.votarResposta(resposta, 1);
+
+    expect(postServiceMock.upvoteAnswer).toHaveBeenCalledWith(
+      '1',
+      'answer-1'
+    );
+
+    expect(component.respostas[0].upVotes).toBe(6);
+    expect(component.respostas[0].downVotes).toBe(2);
+  });
+
+  it('should downvote a response', async () => {
+    const resposta = {
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    };
+
+    component.respostas = [resposta];
+
+    await component.votarResposta(resposta, -1);
+
+    expect(postServiceMock.downvoteAnswer).toHaveBeenCalledWith(
+      '1',
+      'answer-1'
+    );
+
+    expect(component.respostas[0].upVotes).toBe(5);
+    expect(component.respostas[0].downVotes).toBe(3);
+  });
+
+  it('should handle response vote error', async () => {
+    const resposta = {
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    };
+
+    postServiceMock.upvoteAnswer.mockRejectedValueOnce(
+      new Error('Erro ao votar')
+    );
+
+    component.respostas = [resposta];
+
+    await component.votarResposta(resposta, 1);
+
+    expect(component.respostas[0].upVotes).toBe(5);
+    expect(component.respostas[0].downVotes).toBe(2);
   });
 });
