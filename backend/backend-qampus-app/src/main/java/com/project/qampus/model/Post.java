@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +20,6 @@ import java.util.Set;
 @Setter
 @Getter
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -45,4 +47,7 @@ public class Post {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answer = new ArrayList<>();
 }
