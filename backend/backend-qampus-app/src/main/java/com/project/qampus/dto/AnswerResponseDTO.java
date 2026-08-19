@@ -9,16 +9,19 @@ public record AnswerResponseDTO(
         String content,
         String userId,
         String postId,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        Long upVotes,
+        Long downVotes
 ) {
-
     public static AnswerResponseDTO from(Answer answer) {
         return new AnswerResponseDTO(
                 answer.getId(),
                 answer.getContent(),
                 answer.getUser().getId(),
                 answer.getPost().getId(),
-                answer.getCreatedAt()
+                answer.getCreatedAt(),
+                answer.getUpVotes(),
+                answer.getDownVotes()
         );
     }
 }

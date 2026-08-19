@@ -1,12 +1,17 @@
 package com.project.qampus.service;
 
+import java.util.Optional;
+
 import com.project.qampus.dto.AnswerDTO;
 import com.project.qampus.model.Answer;
 import com.project.qampus.model.Post;
 import com.project.qampus.model.User;
+import com.project.qampus.model.Vote;
+import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.repositories.AnswerRepository;
 import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.repositories.UserRepository;
+import com.project.qampus.repositories.VoteRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,22 +25,17 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     public Answer create(
             String postId,
             AnswerDTO body,
-            Authentication authentication
+            User user
     ) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() ->
                         new RuntimeException("Post not found... x.x"));
-
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("Usuário não encontrado."));
 
         Answer answer = new Answer();
 
@@ -43,6 +43,57 @@ public class AnswerService {
         answer.setPost(post);
         answer.setUser(user);
 
+        return answerRepository.save(answer);
+    }
+
+    public Answer vote(String answerId, VoteType type, User user) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new RuntimeException("resposta não encontrada"));
+
+        Optional<Vote> existingVote = voteRepository.findByUserIdAndAnswerId(user.getId(), answer.getId());
+        
+        // Se já existir voto
+        if (existingVote.isPresent()) {
+            Vote vote = existingVote.get();
+
+            // remover voto
+            if (vote.getType() == type) {
+                if (type == VoteType.LIKE) {
+                    answer.setUpVotes(answer.getUpVotes() - 1);
+                } else {
+                    answer.setDownVotes(answer.getDownVotes() - 1);
+                }
+                voteRepository.delete(vote);
+            } 
+            // mudar voto
+            else {
+                if (type == VoteType.LIKE) {
+                    answer.setUpVotes(answer.getUpVotes() + 1);
+                    answer.setDownVotes(answer.getDownVotes() - 1);
+                } else {
+                    answer.setDownVotes(answer.getDownVotes() + 1);
+                    answer.setUpVotes(answer.getUpVotes() - 1);
+                }
+                vote.setType(type);
+                voteRepository.save(vote);
+            }
+        } 
+        // se nao votou
+        else {
+            Vote vote = new Vote();
+
+            vote.setUser(user);
+            vote.setAnswer(answer);
+            vote.setType(type);
+
+            voteRepository.save(vote);
+
+            if (type == VoteType.LIKE) {
+                answer.setUpVotes(answer.getUpVotes() + 1);
+            } 
+            else {
+                answer.setDownVotes(answer.getDownVotes() + 1);
+            }
+        }
         return answerRepository.save(answer);
     }
 }

@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Answer {
+    private Long upVotes = 0L;
 
+    private Long downVotes = 0L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
