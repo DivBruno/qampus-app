@@ -13,6 +13,12 @@ O sistema tem como objetivo oferecer uma plataforma onde alunos possam, de forma
 
 A proposta busca centralizar a comunicação acadêmica em um único ambiente, promovendo uma melhor organização das informações e incentivando a colaboração entre alunos e professores, tornando o processo de aprendizagem mais acessível e eficiente.
 
+## URLs no Render
+Backend\
+[https://qampus-app-s3da.onrender.com](https://qampus-app-s3da.onrender.com)\
+Frontend\
+[https://qampus-app.onrender.com](https://qampus-app.onrender.com)
+
 ## Objetivos
 - Permitir que usuários realizem cadastro na plataforma, informando dados básicos como nome, e-mail e senha.
 - Possibilitar que alunos publiquem dúvidas, editem suas postagens e interajam por meio de respostas.
