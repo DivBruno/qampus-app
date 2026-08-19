@@ -38,7 +38,7 @@ public class AnswerController {
         Answer answer = answerService.create(
                 postId,
                 body,
-                authentication
+                (User) authentication.getPrincipal()
         );
 
         return ResponseEntity

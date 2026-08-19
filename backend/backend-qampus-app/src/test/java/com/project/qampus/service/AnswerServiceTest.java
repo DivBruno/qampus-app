@@ -66,7 +66,7 @@ class AnswerServiceTest {
         Answer result = answerService.create(
                 "post-1",
                 dto,
-                authentication
+                (User) authentication.getPrincipal()
         );
 
         assertNotNull(result);
@@ -114,7 +114,7 @@ class AnswerServiceTest {
                 () -> answerService.create(
                         "post-1",
                         dto,
-                        authentication
+                        (User) authentication.getPrincipal()
                 )
         );
 
@@ -152,7 +152,7 @@ class AnswerServiceTest {
                 () -> answerService.create(
                         "post-1",
                         dto,
-                        authentication
+                        (User) authentication.getPrincipal()
                 )
         );
 
@@ -196,7 +196,7 @@ class AnswerServiceTest {
         Answer result = answerService.create(
                 "post-1",
                 dto,
-                authentication
+                (User) authentication.getPrincipal()
         );
 
         assertNotNull(result);
@@ -235,7 +235,7 @@ class AnswerServiceTest {
         Answer result = answerService.create(
                 "post-1",
                 dto,
-                authentication
+                (User) authentication.getPrincipal()
         );
 
         assertNotNull(result);
@@ -264,7 +264,7 @@ class AnswerServiceTest {
                 () -> answerService.create(
                         "post-404",
                         dto,
-                        authentication
+                        (User) authentication.getPrincipal()
                 )
         );
 
@@ -298,7 +298,7 @@ class AnswerServiceTest {
                 () -> answerService.create(
                         "post-1",
                         dto,
-                        authentication
+                        (User) authentication.getPrincipal()
                 )
         );
 
