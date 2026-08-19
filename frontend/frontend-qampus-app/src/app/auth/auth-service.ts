@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = "http://localhost:8080/auth";
+  private apiUrl = environment.apiUrl+"/auth";
   
   getToken(): string | null{
     return localStorage.getItem('token');

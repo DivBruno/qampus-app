@@ -61,7 +61,7 @@ class AnswerControllerTest {
         when(answerService.create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         )).thenReturn(answer);
 
         when(user.getId()).thenReturn("user-1");
@@ -104,7 +104,7 @@ class AnswerControllerTest {
         verify(answerService).create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         );
     }
 
@@ -120,7 +120,7 @@ class AnswerControllerTest {
         when(answerService.create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         )).thenReturn(answer);
 
         when(user.getId()).thenReturn("user-1");
@@ -135,7 +135,7 @@ class AnswerControllerTest {
         verify(answerService, times(1)).create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         );
     }
 
@@ -151,7 +151,7 @@ class AnswerControllerTest {
         when(answerService.create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         )).thenThrow(
                 new RuntimeException("Post not found... x.x")
         );
@@ -173,7 +173,7 @@ class AnswerControllerTest {
         verify(answerService).create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         );
     }
 
@@ -189,7 +189,7 @@ class AnswerControllerTest {
         when(answerService.create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         )).thenThrow(
                 new RuntimeException("Usuário não encontrado.")
         );
@@ -211,7 +211,7 @@ class AnswerControllerTest {
         verify(answerService).create(
                 postId,
                 answerDTO,
-                (User) authentication.getPrincipal()
+                authentication
         );
     }
 }
