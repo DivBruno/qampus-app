@@ -18,7 +18,7 @@ import com.project.qampus.dto.RegisterRequestDTO;
 import com.project.qampus.dto.ResponseDTO;
 import com.project.qampus.model.BlacklistedToken;
 import com.project.qampus.model.User;
-import com.project.qampus.model.enums.Role;
+//import com.project.qampus.model.enums.Role;
 
 import jakarta.servlet.http.HttpServletRequest;
 
