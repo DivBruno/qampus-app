@@ -9,7 +9,6 @@ import com.project.qampus.model.User;
 import com.project.qampus.model.Vote;
 import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.repositories.PostRepository;
-//import com.project.qampus.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +24,6 @@ public class PostService {
 
     private final PostRepository repository;
     private final TagService tagService;
-    // private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final PostRepository postRepository;
 
