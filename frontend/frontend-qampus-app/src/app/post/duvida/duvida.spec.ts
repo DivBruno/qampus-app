@@ -33,7 +33,8 @@ describe('Duvida', () => {
   };
 
   const postServiceMock = {
-    findById: vi.fn()
+    findById: vi.fn(),
+    createAnswer: vi.fn()
   };
 
   beforeEach(async () => {
@@ -43,7 +44,15 @@ describe('Duvida', () => {
 
     postServiceMock.findById.mockResolvedValue({
       ...postMock,
-      tags: [...postMock.tags],
+      tags: postMock.tags.map(tag => ({ ...tag }))
+    });
+
+    postServiceMock.createAnswer.mockResolvedValue({
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00'
     });
 
     await TestBed.configureTestingModule({
@@ -126,26 +135,49 @@ describe('Duvida', () => {
     ]);
   });
 
-  it('should not allow an empty response', () => {
+  it('should not allow an empty response', async () => {
     component.novaResposta = '   ';
 
     component.responder();
 
+    expect(postServiceMock.createAnswer).not.toHaveBeenCalled();
     expect(component.novaResposta).toBe('   ');
   });
 
-  it.each([
-    ['   ', '   '],
-    ['Essa é uma resposta válida.', ''],
-    ['  Resposta válida  ', ''],
-  ])(
-    'should handle response "%s"',
-    (resposta, resultadoEsperado) => {
-      component.novaResposta = resposta;
+  it('should create a response successfully', async () => {
+    component.novaResposta = 'Essa é uma resposta válida.';
 
-      component.responder();
+    await component.responder();
 
-      expect(component.novaResposta).toBe(resultadoEsperado);
-    }
-  );
+    expect(postServiceMock.createAnswer).toHaveBeenCalledWith(
+      '1',
+      'Essa é uma resposta válida.'
+    );
+
+    expect(component.novaResposta).toBe('');
+  });
+
+  it('should add the created response to the discussion', async () => {
+    component.novaResposta = 'Essa é uma resposta válida.';
+
+    await component.responder();
+
+    expect(component.respostas.length).toBe(1);
+    expect(component.respostas[0].id).toBe('answer-1');
+    expect(component.respostas[0].content).toBe(
+      'Essa é uma resposta válida.'
+    );
+  });
+
+  it('should handle response creation error', async () => {
+    postServiceMock.createAnswer.mockRejectedValueOnce(
+      new Error('Erro ao criar resposta')
+    );
+
+    component.novaResposta = 'Resposta válida.';
+
+    await component.responder();
+
+    expect(component.novaResposta).toBe('Resposta válida.');
+  });
 });

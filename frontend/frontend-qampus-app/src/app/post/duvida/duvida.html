@@ -30,7 +30,6 @@
 
         </div>
 
-
         <div class="question-content">
 
           <h2>{{ post.title }}</h2>
@@ -45,11 +44,40 @@
 
           </div>
 
-
           <p class="descricao">
             {{ post.content }}
           </p>
 
+          <!-- RESPOSTAS -->
+          <section class="respostas">
+
+            <h3>Respostas</h3>
+
+            @if (respostas.length > 0) {
+
+              @for (resposta of respostas; track resposta.id) {
+
+                <article class="resposta">
+
+                  <strong>Resposta:</strong>
+
+                  <p>
+                    {{ resposta.content }}
+                  </p>
+
+                </article>
+
+              }
+
+            } @else {
+
+              <p>Nenhuma resposta ainda.</p>
+
+            }
+
+          </section>
+
+          <!-- RESPONDER -->
           <div class="responder-area">
 
             <h3>Responder dúvida</h3>
@@ -85,7 +113,12 @@
 
   </section>
 
-<button (click)="editarDuvida()">Editar</button>
+  <button
+    type="button"
+    (click)="editarDuvida()">
+    Editar
+  </button>
+
   <aside class="relacionadas">
 
     <h3>Relacionadas:</h3>

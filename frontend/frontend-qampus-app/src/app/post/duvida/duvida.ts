@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../navbar/navbar';
-import { Post, PostService } from '../post-service';
+import { Post, PostService, Answer } from '../post-service';
 
 @Component({
   selector: 'app-duvida',
@@ -15,6 +15,8 @@ export class Duvida implements OnInit {
   post: Post | null = null;
 
   novaResposta = '';
+
+  respostas: Answer[] = [];
 
   constructor(
     private router: Router,
@@ -50,15 +52,28 @@ export class Duvida implements OnInit {
     }
   }
 
-  responder(): void {
+  async responder(): Promise<void> {
     if (!this.novaResposta.trim()) {
       alert('O conteúdo da resposta é obrigatório.');
       return;
     }
 
-    console.log('Resposta:', this.novaResposta);
+    if (!this.post) {
+      return;
+    }
 
-    this.novaResposta = '';
+    try {
+      const resposta = await this.postService.createAnswer(
+        this.post.id,
+        this.novaResposta
+      );
+
+      this.respostas.push(resposta);
+      this.novaResposta = '';
+    } catch (error) {
+      console.error('Erro ao responder dúvida:', error);
+      alert('Erro ao enviar resposta.');
+    }
   }
 
   editarDuvida(): void {
