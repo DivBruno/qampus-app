@@ -40,15 +40,21 @@ export class Duvida implements OnInit {
     }
   }
 
-  votar(valor: number): void {
+  async votar(valor: number): Promise<void> {
     if (!this.post) {
       return;
     }
 
-    if (valor > 0) {
-      this.post.upVotes++;
-    } else {
-      this.post.downVotes++;
+    try {
+      const postAtualizado =
+        valor > 0
+          ? await this.postService.upvotePost(this.post.id)
+          : await this.postService.downvotePost(this.post.id);
+
+      this.post = postAtualizado;
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Erro ao votar na dúvida:', error);
     }
   }
 
