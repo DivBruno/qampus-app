@@ -2,7 +2,6 @@ package com.project.qampus.service.security;
 
 import com.project.qampus.model.User;
 import com.project.qampus.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
