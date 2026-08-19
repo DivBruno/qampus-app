@@ -30,12 +30,18 @@ public class AnswerService {
     public Answer create(
             String postId,
             AnswerDTO body,
-            User user
+            Authentication authentication
     ) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() ->
                         new RuntimeException("Post not found... x.x"));
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("Usuário não encontrado."));
 
         Answer answer = new Answer();
 
