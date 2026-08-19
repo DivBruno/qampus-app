@@ -1,21 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PostService, NewPost } from '../post-service';
 import { CreatePost } from './create-post';
-import { ActivatedRoute, Router } from '@angular/router';
-import { provideRouter } from '@angular/router';
+import {  Router } from '@angular/router';
 
 describe('CreatePost', () => {
   let component: CreatePost;
   let fixture: ComponentFixture<CreatePost>;
   
-  const activatedRouteMock = {
-    snapshot: {
-      paramMap: {
-        get: vi.fn()
-      }
-    }
-  };
-
   let postService: {
     createPost: ReturnType<typeof vi.fn>;
   }
@@ -41,10 +32,6 @@ describe('CreatePost', () => {
           provide: Router,
           useValue: routerMock
         },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteMock
-        }
       ]
     }).compileComponents();
 

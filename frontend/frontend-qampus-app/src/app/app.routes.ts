@@ -6,6 +6,7 @@ import { authGuard } from './auth/auth-guard';
 import { CreatePost } from './post/create-post/create-post';
 import { Home } from './post/home/home';
 import { Duvida } from './post/duvida/duvida';
+import { EditPost } from './post/edit-post/edit-post';
 
 export const routes: Routes = [
   {
@@ -45,7 +46,7 @@ export const routes: Routes = [
   },
   {
     path: 'post/editar/:id',
-    component: CreatePost,
+    component: EditPost,
     canActivate: [authGuard],
     data: {role: 'STUDENT'}
   }

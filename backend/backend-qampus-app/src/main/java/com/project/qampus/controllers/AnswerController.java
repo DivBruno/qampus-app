@@ -2,9 +2,7 @@ package com.project.qampus.controllers;
 
 import com.project.qampus.dto.AnswerDTO;
 import com.project.qampus.dto.AnswerResponseDTO;
-import com.project.qampus.dto.PostResponseDTO;
 import com.project.qampus.model.Answer;
-import com.project.qampus.model.Post;
 import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.service.AnswerService;
 

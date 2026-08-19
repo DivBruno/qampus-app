@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 export interface Tag {
   id: string;
@@ -21,7 +22,7 @@ export interface NewPost{
   tags: string[]
 }
 
-export interface EditPost{
+export interface EditPostI{
   id: string,
   title: string,
   content: string,
@@ -33,7 +34,7 @@ export interface EditPost{
 })
 export class PostService {
 
-  private apiUrl = 'http://localhost:8080/post';
+  private apiUrl = environment.apiUrl+"/post";
 
   async findAll(): Promise<Post[]> {
     const response = await fetch(this.apiUrl, {
@@ -84,7 +85,15 @@ export class PostService {
     return await response.json();
   }
 
-  async editPost(post: EditPost){
-    return true;
+  async editPost(post: EditPostI, id: string){
+    const response = await fetch(`${this.apiUrl}/${id}`,{
+      method: 'PUT',
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+localStorage.getItem('token')
+      },
+      body: JSON.stringify(post),
+    });
+    return response.ok;
   }
 }
