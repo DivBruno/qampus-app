@@ -1,18 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { NewPost, PostService } from './post-service';
 
-import { DuvidaService } from './duvida-service';
-import { Duvida } from './duvida';
-
-describe('DuvidaService', () => {
-  let service: DuvidaService;
+describe('PostService', () => {
+  let service: PostService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DuvidaService);
+    service = TestBed.inject(PostService);
   });
 
   it('should create new post succesfully', async() => {
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
@@ -20,7 +18,7 @@ describe('DuvidaService', () => {
     const token = 'token-teste';
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response(
-        JSON.stringify(duvida),
+        JSON.stringify(post),
         {
           status: 200,
           headers: {'Content-Type': 'application/json',
@@ -29,7 +27,7 @@ describe('DuvidaService', () => {
         }
       )
     )
-    const result = await service.createDuvida(duvida);
+    const result = await service.createPost(post);
     expect(result).toBe(true);
   });
 
@@ -37,13 +35,13 @@ describe('DuvidaService', () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response(null, {status: 401})
     );
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
     }
 
-    const result = await service.createDuvida(duvida);
+    const result = await service.createPost(post);
     expect(result).toBe(false);
   })
 
@@ -51,12 +49,12 @@ describe('DuvidaService', () => {
     vi.spyOn(globalThis, 'fetch').mockRejectedValue(
       new Error('Erro de conexão')
     );
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
     }
-    const result = await service.createDuvida(duvida);
+    const result = await service.createPost(post);
     expect(result).toBe(false);
   })
 });

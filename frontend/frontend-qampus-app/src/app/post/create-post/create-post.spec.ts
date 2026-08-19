@@ -1,24 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { PostService, NewPost } from '../post-service';
 import { CreatePost } from './create-post';
-import { DuvidaService } from '../duvida-service';
-import { Router } from '@angular/router';
-import { Duvida } from '../duvida';
+import { ActivatedRoute, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 describe('CreatePost', () => {
   let component: CreatePost;
   let fixture: ComponentFixture<CreatePost>;
+  
+  const activatedRouteMock = {
+    snapshot: {
+      paramMap: {
+        get: vi.fn()
+      }
+    }
+  };
 
-  let duvidaService: {
-    createDuvida: ReturnType<typeof vi.fn>;
+  let postService: {
+    createPost: ReturnType<typeof vi.fn>;
   }
   let routerMock: {
     navigate: ReturnType<typeof vi.fn>;
   }
 
   beforeEach(async () => {
-    duvidaService = {
-      createDuvida: vi.fn(),
+    postService = {
+      createPost: vi.fn(),
     }
     routerMock={
       navigate: vi.fn(),
@@ -27,12 +34,16 @@ describe('CreatePost', () => {
       imports: [CreatePost],
       providers: [
         {
-          provide: DuvidaService,
-          useValue: duvidaService
+          provide: PostService,
+          useValue: postService
         },
         {
           provide: Router,
           useValue: routerMock
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteMock
         }
       ]
     }).compileComponents();
@@ -43,22 +54,22 @@ describe('CreatePost', () => {
   });
 
   it('should call DuvidaService createDuvida with a new post', async() => {
-    duvidaService.createDuvida.mockResolvedValue(true);
+    postService.createPost.mockResolvedValue(true);
     component.postForm.setValue({
       title: 'TESTE',
       content: 'TESTES'
     })
     await component.submit();
-    const duvida: Duvida = {
+    const post: NewPost = {
       title: 'TESTE',
       content: 'TESTES',
       tags: []
     }
-    expect(duvidaService.createDuvida).toHaveBeenCalledWith(duvida);
+    expect(postService.createPost).toHaveBeenCalledWith(post);
   });
 
   it('should show an alert when creating post fails', async()=>{
-    duvidaService.createDuvida.mockResolvedValue(false);
+    postService.createPost.mockResolvedValue(false);
     const alertMock = vi
       .spyOn(window, 'alert')
       .mockImplementation(()=>{});

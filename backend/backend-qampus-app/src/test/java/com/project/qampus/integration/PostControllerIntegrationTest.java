@@ -1,10 +1,9 @@
 package com.project.qampus.integration;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.qampus.dto.PostDTO;
 import com.project.qampus.dto.RegisterRequestDTO;
 import com.project.qampus.model.enums.Role;
-import com.project.qampus.repositories.QuestionRepository;
+import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.repositories.TagRepository;
 import com.project.qampus.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +37,7 @@ class PostControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private PostRepository postRepository;
 
     @Autowired
     private TagRepository tagRepository;
@@ -53,11 +52,11 @@ class PostControllerIntegrationTest {
                 .apply(springSecurity())
                 .build();
 
-        questionRepository.deleteAll();
+        postRepository.deleteAll();
         tagRepository.deleteAll();
         userRepository.deleteAll();
 
-        RegisterRequestDTO registerDTO = new RegisterRequestDTO("Professor Teste", "prof@qampus.com", "senha123", Role.PROFESSOR);
+        RegisterRequestDTO registerDTO = new RegisterRequestDTO("Aluno Teste", "aluno@qampus.com", "senha123", Role.STUDENT);
         MvcResult result = mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDTO)))
@@ -82,7 +81,7 @@ class PostControllerIntegrationTest {
     void shouldCreatePostSuccessfullyWithValidJwtToken() throws Exception {
         PostDTO postDTO = new PostDTO("Dúvida sobre Spring Boot", "Como configurar testes de integração?", Set.of("spring", "junit"));
 
-        mockMvc.perform(post("/question/create")
+        mockMvc.perform(post("/post/create")
                         .header("Authorization", "Bearer " + validToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDTO)))
@@ -91,7 +90,7 @@ class PostControllerIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Dúvida sobre Spring Boot"))
                 .andExpect(jsonPath("$.content").value("Como configurar testes de integração?"));
 
-        assertEquals(1, questionRepository.count());
+        assertEquals(1, postRepository.count());
     }
 
     @Test
@@ -102,7 +101,7 @@ class PostControllerIntegrationTest {
 
         PostDTO postDTO = new PostDTO("Título após logout", "Conteúdo após logout", Set.of("tag1"));
 
-        mockMvc.perform(post("/question/create")
+        mockMvc.perform(post("/post/create")
                         .header("Authorization", "Bearer " + validToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDTO)))

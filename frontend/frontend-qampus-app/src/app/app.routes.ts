@@ -3,9 +3,9 @@ import { Login } from './auth/login/login';
 import { Register } from './auth/register/register';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { authGuard } from './auth/auth-guard';
-import { CreatePost } from './create-post/create-post';
-import { Home } from './home/home';
-import { Duvida } from './duvida/duvida';
+import { CreatePost } from './post/create-post/create-post';
+import { Home } from './post/home/home';
+import { Duvida } from './post/duvida/duvida';
 
 export const routes: Routes = [
   {
@@ -16,6 +16,7 @@ export const routes: Routes = [
     path: 'home',
     component: Home,
     canActivate: [authGuard],
+    data: {role: 'STUDENT'}
   },
   {
     path: 'registrar',
@@ -31,15 +32,21 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'duvida/criar',
+    path: 'post/criar',
     component: CreatePost,
     canActivate: [authGuard],
-//    data: {role: 'STUDENT'}
+    data: {role: 'STUDENT'}
   },
   {
-    path: 'duvida/:id',
+    path: 'post/:id',
     component: Duvida,
     canActivate: [authGuard],
+    data: {role: 'STUDENT'}
   },
-
+  {
+    path: 'post/editar/:id',
+    component: CreatePost,
+    canActivate: [authGuard],
+    data: {role: 'STUDENT'}
+  }
 ];

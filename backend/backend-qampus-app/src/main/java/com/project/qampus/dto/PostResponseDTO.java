@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record PostResponseDTO(String id, String title, String content, Long upVotes, Long downVotes,
-                              Set<TagResponseDTO> tags, LocalDateTime createdAt){
+                            Set<TagResponseDTO> tags, LocalDateTime createdAt){
     public static PostResponseDTO from(Post post) {
         Set<TagResponseDTO> tagDTOs = post.getTags().stream()
                 .map(TagResponseDTO::from)
@@ -20,8 +20,7 @@ public record PostResponseDTO(String id, String title, String content, Long upVo
                 post.getUpVotes(),
                 post.getDownVotes(),
                 tagDTOs,
-                post.getCreated_at()
+                post.getCreatedAt() 
         );
     }
-
 }

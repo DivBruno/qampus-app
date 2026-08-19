@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../navbar/navbar';
-import { Post, PostService } from '../post/post-service';
+import { Navbar } from '../../navbar/navbar';
+import { Post, PostService } from '../post-service';
 
 @Component({
   selector: 'app-duvida',
@@ -19,7 +19,8 @@ export class Duvida implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private postService: PostService
+    private postService: PostService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -31,6 +32,7 @@ export class Duvida implements OnInit {
 
     try {
       this.post = await this.postService.findById(id);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar dúvida:', error);
     }
@@ -57,6 +59,10 @@ export class Duvida implements OnInit {
     console.log('Resposta:', this.novaResposta);
 
     this.novaResposta = '';
+  }
+
+  editarDuvida(): void {
+    this.router.navigate(['/post/editar', this.post?.id]);
   }
 
   visualizarRelacionada(id: string): void {
