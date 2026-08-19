@@ -29,6 +29,14 @@ export interface EditPostI{
   tags: string[]
 }
 
+export interface Answer {
+  id: string;
+  content: string;
+  userId: string;
+  postId: string;
+  createdAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -95,5 +103,24 @@ export class PostService {
       body: JSON.stringify(post),
     });
     return response.ok;
+  }
+
+  async createAnswer(postId: string, content: string): Promise<Answer> {
+    const response = await fetch(`${this.apiUrl}/${postId}/answer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+      body: JSON.stringify({
+        content
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao criar resposta');
+    }
+
+    return await response.json();
   }
 }

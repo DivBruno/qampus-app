@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../navbar/navbar';
-import { Post, PostService } from '../post-service';
-import { ChangeDetectorRef } from '@angular/core';
+import { Post, PostService, Answer } from '../post-service';
 
 @Component({
   selector: 'app-duvida',
-  imports: [Navbar],
+  imports: [Navbar, FormsModule],
   templateUrl: './duvida.html',
   styleUrl: './duvida.css',
 })
 export class Duvida implements OnInit {
 
   post: Post | null = null;
+
+  novaResposta = '';
+
+  respostas: Answer[] = [];
 
   constructor(
     private router: Router,
@@ -23,6 +27,7 @@ export class Duvida implements OnInit {
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+
     if (!id) {
       return;
     }
@@ -47,9 +52,34 @@ export class Duvida implements OnInit {
     }
   }
 
-  editarDuvida(){
+  async responder(): Promise<void> {
+    if (!this.novaResposta.trim()) {
+      alert('O conteúdo da resposta é obrigatório.');
+      return;
+    }
+
+    if (!this.post) {
+      return;
+    }
+
+    try {
+      const resposta = await this.postService.createAnswer(
+        this.post.id,
+        this.novaResposta
+      );
+
+      this.respostas.push(resposta);
+      this.novaResposta = '';
+    } catch (error) {
+      console.error('Erro ao responder dúvida:', error);
+      alert('Erro ao enviar resposta.');
+    }
+  }
+
+  editarDuvida(): void {
     this.router.navigate(['/post/editar', this.post?.id]);
   }
+
   visualizarRelacionada(id: string): void {
     this.router.navigate(['/duvida', id]);
   }
