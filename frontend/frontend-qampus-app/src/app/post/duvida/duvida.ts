@@ -82,6 +82,29 @@ export class Duvida implements OnInit {
     }
   }
 
+  async votarResposta(resposta: Answer, valor: number): Promise<void> {
+    if (!this.post) {
+      return;
+    }
+
+    try {
+      const respostaAtualizada =
+        valor > 0
+          ? await this.postService.upvoteAnswer(this.post.id, resposta.id)
+          : await this.postService.downvoteAnswer(this.post.id, resposta.id);
+
+      const index = this.respostas.findIndex(
+        r => r.id === resposta.id
+      );
+
+      if (index !== -1) {
+        this.respostas[index] = respostaAtualizada;
+      }
+    } catch (error) {
+      console.error('Erro ao votar na resposta:', error);
+    }
+  }
+
   editarDuvida(): void {
     this.router.navigate(['/post/editar', this.post?.id]);
   }

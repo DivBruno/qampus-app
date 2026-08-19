@@ -9,7 +9,6 @@ import com.project.qampus.model.User;
 import com.project.qampus.model.Vote;
 import com.project.qampus.model.enums.VoteType;
 import com.project.qampus.repositories.PostRepository;
-import com.project.qampus.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +24,6 @@ public class PostService {
 
     private final PostRepository repository;
     private final TagService tagService;
-    private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final PostRepository postRepository;
 
@@ -50,26 +48,22 @@ public class PostService {
 
     public Post findById(String id) {
         return repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Post not found... x.x"));
+                .orElseThrow(() -> new RuntimeException("Post not found... x.x"));
     }
 
     public Post update(
             String id,
             PostDTO body,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
 
         Post post = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Post not found... x.x"));
+                .orElseThrow(() -> new RuntimeException("Post not found... x.x"));
 
         User user = (User) authentication.getPrincipal();
 
         if (!post.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException(
-                    "Você não pode editar esta dúvida."
-            );
+                    "Você não pode editar esta dúvida.");
         }
 
         post.setTitle(body.title());
@@ -83,7 +77,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("post não encontrado"));
 
         Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(user.getId(), post.getId());
-        
+
         // Se já existir voto
         if (existingVote.isPresent()) {
             Vote vote = existingVote.get();
@@ -96,7 +90,7 @@ public class PostService {
                     post.setDownVotes(post.getDownVotes() - 1);
                 }
                 voteRepository.delete(vote);
-            } 
+            }
             // mudar voto
             else {
                 if (type == VoteType.LIKE) {
@@ -109,7 +103,7 @@ public class PostService {
                 vote.setType(type);
                 voteRepository.save(vote);
             }
-        } 
+        }
         // se nao votou
         else {
             Vote vote = new Vote();
@@ -122,8 +116,7 @@ public class PostService {
 
             if (type == VoteType.LIKE) {
                 post.setUpVotes(post.getUpVotes() + 1);
-            } 
-            else {
+            } else {
                 post.setDownVotes(post.getDownVotes() + 1);
             }
         }
