@@ -27,12 +27,12 @@ public class AnswerController {
     private final AnswerService answerService;
 
     @PostMapping
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AnswerResponseDTO> createAnswer(
             @PathVariable String postId,
             @Valid @RequestBody AnswerDTO body,
             Authentication authentication) {
-
+                System.out.println("entrou");
         Answer answer = answerService.create(
                 postId,
                 body,

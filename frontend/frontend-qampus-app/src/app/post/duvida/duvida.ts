@@ -40,14 +40,16 @@ export class Duvida implements OnInit {
     }
   }
 
-  votar(valor: number): void {
+  votar(valor: number){
     if (!this.post) {
       return;
     }
 
     if (valor > 0) {
+      this.postService.votePost(this.post.id, "upvote");
       this.post.upVotes++;
     } else {
+      this.postService.votePost(this.post.id, "downvote");
       this.post.downVotes++;
     }
   }
@@ -70,6 +72,7 @@ export class Duvida implements OnInit {
 
       this.respostas.push(resposta);
       this.novaResposta = '';
+      this.cdr.detectChanges()
     } catch (error) {
       console.error('Erro ao responder dúvida:', error);
       alert('Erro ao enviar resposta.');
