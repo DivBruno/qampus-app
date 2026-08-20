@@ -27,215 +27,189 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AnswerServiceTest {
 
-    @Mock
-    private AnswerRepository answerRepository;
+        @Mock
+        private AnswerRepository answerRepository;
 
-    @Mock
-    private PostRepository postRepository;
+        @Mock
+        private PostRepository postRepository;
 
-    @Mock
-    private UserRepository userRepository;
+        @Mock
+        private UserRepository userRepository;
 
-    @Mock
-    private Authentication authentication;
+        @Mock
+        private Authentication authentication;
 
-    @Mock
-    private Answer answer;
+        @Mock
+        private Answer answer;
 
-    @Mock
-    private Post post;
+        @Mock
+        private Post post;
 
-    @Mock
-    private User user;
+        @Mock
+        private User user;
 
-    @InjectMocks
-    private AnswerService answerService;
-    
-    @Mock
-    private VoteRepository voteRepository;
+        @InjectMocks
+        private AnswerService answerService;
 
-    @Test
-    void shouldCreateAnswerSuccessfully() {
+        @Mock
+        private VoteRepository voteRepository;
 
-        AnswerDTO dto = new AnswerDTO(
-                "Esta é uma resposta válida."
-        );
+        @Test
+        void shouldCreateAnswerSuccessfully() {
 
-        when(postRepository.findById("post-1"))
-                .thenReturn(Optional.of(post));
+                AnswerDTO dto = new AnswerDTO(
+                                "Esta é uma resposta válida.");
 
-        when(authentication.getName())
-                .thenReturn("ana@qampus.com");
+                when(postRepository.findById("post-1"))
+                                .thenReturn(Optional.of(post));
 
-        when(userRepository.findByEmail("ana@qampus.com"))
-                .thenReturn(Optional.of(user));
+                when(authentication.getPrincipal())
+                                .thenReturn(user);
 
-        when(answerRepository.save(any(Answer.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+                when(answerRepository.save(any(Answer.class)))
+                                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Answer result = answerService.create(
-                "post-1",
-                dto,
-                authentication
-        );
+                Answer result = answerService.create(
+                                "post-1",
+                                dto,
+                                authentication);
 
-        assertNotNull(result);
+                assertNotNull(result);
 
-        assertEquals(
-                "Esta é uma resposta válida.",
-                result.getContent()
-        );
+                assertEquals(
+                                "Esta é uma resposta válida.",
+                                result.getContent());
 
-        assertSame(
-                user,
-                result.getUser()
-        );
+                assertSame(
+                                user,
+                                result.getUser());
 
-        assertSame(
-                post,
-                result.getPost()
-        );
+                assertSame(
+                                post,
+                                result.getPost());
 
-        verify(postRepository)
-                .findById("post-1");
+                verify(postRepository)
+                                .findById("post-1");
 
-        verify(authentication)
-                .getName();
+                verify(authentication)
+                                .getPrincipal();
 
-        verify(userRepository)
-                .findByEmail("ana@qampus.com");
+                verify(answerRepository)
+                                .save(any(Answer.class));
 
-        verify(answerRepository)
-                .save(any(Answer.class));
-    }
+                verifyNoInteractions(userRepository);
+        }
 
-    @Test
-    void shouldThrowExceptionWhenPostDoesNotExist() {
+        @Test
+        void shouldThrowExceptionWhenPostDoesNotExist() {
 
-        AnswerDTO dto = new AnswerDTO(
-                "Minha resposta."
-        );
+                AnswerDTO dto = new AnswerDTO(
+                                "Minha resposta.");
 
-        when(postRepository.findById("post-1"))
-                .thenReturn(Optional.empty());
+                when(postRepository.findById("post-1"))
+                                .thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
-                () -> answerService.create(
-                        "post-1",
-                        dto,
-                        authentication
-                )
-        );
+                RuntimeException exception = assertThrows(
+                                RuntimeException.class,
+                                () -> answerService.create(
+                                                "post-1",
+                                                dto,
+                                                authentication));
 
-        assertEquals(
-                "Post not found... x.x",
-                exception.getMessage()
-        );
+                assertEquals(
+                                "Post not found... x.x",
+                                exception.getMessage());
 
-        verify(postRepository)
-                .findById("post-1");
+                verify(postRepository)
+                                .findById("post-1");
 
-        verifyNoInteractions(userRepository);
-        verifyNoInteractions(answerRepository);
-        verifyNoInteractions(authentication);
-    }
+                verifyNoInteractions(userRepository);
+                verifyNoInteractions(answerRepository);
+                verifyNoInteractions(authentication);
+        }
 
-    @Test
-    void shouldThrowExceptionWhenUserDoesNotExist() {
+        @Test
+        void shouldThrowExceptionWhenAuthenticatedUserDoesNotExist() {
 
-        AnswerDTO dto = new AnswerDTO(
-                "Minha resposta."
-        );
+                AnswerDTO dto = new AnswerDTO(
+                                "Minha resposta.");
 
-        when(postRepository.findById("post-1"))
-                .thenReturn(Optional.of(post));
+                when(postRepository.findById("post-1"))
+                                .thenReturn(Optional.of(post));
 
-        when(authentication.getName())
-                .thenReturn("inexistente@qampus.com");
+                when(authentication.getPrincipal())
+                                .thenReturn(null);
 
-        when(userRepository.findByEmail("inexistente@qampus.com"))
-                .thenReturn(Optional.empty());
+                RuntimeException exception = assertThrows(
+                                RuntimeException.class,
+                                () -> answerService.create(
+                                                "post-1",
+                                                dto,
+                                                authentication));
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
-                () -> answerService.create(
-                        "post-1",
-                        dto,
-                        authentication
-                )
-        );
+                assertEquals(
+                                "Usuário não encontrado.",
+                                exception.getMessage());
 
-        assertEquals(
-                "Usuário não encontrado.",
-                exception.getMessage()
-        );
+                verify(postRepository)
+                                .findById("post-1");
 
-        verify(postRepository)
-                .findById("post-1");
+                verify(authentication)
+                                .getPrincipal();
 
-        verify(authentication)
-                .getName();
+                verify(answerRepository, never())
+                                .save(any(Answer.class));
 
-        verify(userRepository)
-                .findByEmail("inexistente@qampus.com");
+                verifyNoInteractions(userRepository);
+        }
 
-        verify(answerRepository, never())
-                .save(any(Answer.class));
-    }
+        @Test
+        void shouldThrowExceptionWhenAnswerDoesNotExist() {
+                when(answerRepository.findById(("answer-404")))
+                                .thenReturn(Optional.empty());
+                RuntimeException exception = assertThrows(
+                                RuntimeException.class,
+                                () -> answerService.vote(
+                                                "answer-404",
+                                                VoteType.LIKE,
+                                                user));
 
-    @Test
-    void shouldThrowExceptionWhenAnswerDoesNotExist(){
-        when(answerRepository.findById(("answer-404")))
-                .thenReturn(Optional.empty());
-        RuntimeException exception = assertThrows(
-            RuntimeException.class,
-            () -> answerService.vote(
-                    "answer-404",
-                    VoteType.LIKE,
-                    user
-            )
-        );
+                assertEquals(
+                                "resposta não encontrada",
+                                exception.getMessage());
 
-        assertEquals(
-            "resposta não encontrada",
-            exception.getMessage()
-        );
+                verify(answerRepository)
+                                .findById("answer-404");
 
-        verify(answerRepository)
-            .findById("answer-404");
-
-        verifyNoInteractions(voteRepository);
-    }
+                verifyNoInteractions(voteRepository);
+        }
 
         @Test
         void shouldCreateLikeWhenUserHasNotVoted() {
 
                 when(answerRepository.findById("answer-1"))
-                        .thenReturn(Optional.of(answer));
+                                .thenReturn(Optional.of(answer));
 
                 when(user.getId())
-                        .thenReturn("user-1");
+                                .thenReturn("user-1");
 
                 when(answer.getId())
-                        .thenReturn("answer-1");
+                                .thenReturn("answer-1");
 
                 when(voteRepository.findByUserIdAndAnswerId(
-                        "user-1",
-                        "answer-1"
-                )).thenReturn(Optional.empty());
+                                "user-1",
+                                "answer-1")).thenReturn(Optional.empty());
 
                 when(answer.getUpVotes())
-                        .thenReturn(5L);
+                                .thenReturn(5L);
 
                 when(answerRepository.save(answer))
-                        .thenReturn(answer);
+                                .thenReturn(answer);
 
                 Answer result = answerService.vote(
-                        "answer-1",
-                        VoteType.LIKE,
-                        user
-                );
+                                "answer-1",
+                                VoteType.LIKE,
+                                user);
 
                 assertSame(answer, result);
 
@@ -250,30 +224,28 @@ class AnswerServiceTest {
         void shouldCreateDislikeWhenUserHasNotVoted() {
 
                 when(answerRepository.findById("answer-1"))
-                        .thenReturn(Optional.of(answer));
+                                .thenReturn(Optional.of(answer));
 
                 when(user.getId())
-                        .thenReturn("user-1");
+                                .thenReturn("user-1");
 
                 when(answer.getId())
-                        .thenReturn("answer-1");
+                                .thenReturn("answer-1");
 
                 when(voteRepository.findByUserIdAndAnswerId(
-                        "user-1",
-                        "answer-1"
-                )).thenReturn(Optional.empty());
+                                "user-1",
+                                "answer-1")).thenReturn(Optional.empty());
 
                 when(answer.getDownVotes())
-                        .thenReturn(3L);
+                                .thenReturn(3L);
 
                 when(answerRepository.save(answer))
-                        .thenReturn(answer);
+                                .thenReturn(answer);
 
                 Answer result = answerService.vote(
-                        "answer-1",
-                        VoteType.DISLIKE,
-                        user
-                );
+                                "answer-1",
+                                VoteType.DISLIKE,
+                                user);
 
                 assertSame(answer, result);
 
@@ -283,104 +255,101 @@ class AnswerServiceTest {
 
                 verify(answerRepository).save(answer);
         }
+
         @Test
         void shouldRemoveLikeWhenUserVotesAgainWithSameType() {
 
                 when(answerRepository.findById("answer-1"))
-                        .thenReturn(Optional.of(answer));
+                                .thenReturn(Optional.of(answer));
 
                 when(user.getId())
-                        .thenReturn("user-1");
+                                .thenReturn("user-1");
 
                 when(answer.getId())
-                        .thenReturn("answer-1");
+                                .thenReturn("answer-1");
 
                 Vote vote = new Vote();
                 vote.setType(VoteType.LIKE);
 
                 when(voteRepository.findByUserIdAndAnswerId(
-                        "user-1",
-                        "answer-1"
-                )).thenReturn(Optional.of(vote));
+                                "user-1",
+                                "answer-1")).thenReturn(Optional.of(vote));
 
                 when(answer.getUpVotes())
-                        .thenReturn(5L);
+                                .thenReturn(5L);
 
                 when(answerRepository.save(answer))
-                        .thenReturn(answer);
+                                .thenReturn(answer);
 
                 Answer result = answerService.vote(
-                        "answer-1",
-                        VoteType.LIKE,
-                        user
-                );
+                                "answer-1",
+                                VoteType.LIKE,
+                                user);
 
                 assertSame(answer, result);
 
                 verify(answer)
-                        .setUpVotes(4L);
+                                .setUpVotes(4L);
 
                 verify(voteRepository)
-                        .delete(vote);
+                                .delete(vote);
 
                 verify(answerRepository)
-                        .save(answer);
+                                .save(answer);
         }
+
         @Test
         void shouldChangeLikeToDislike() {
 
                 when(answerRepository.findById("answer-1"))
-                        .thenReturn(Optional.of(answer));
+                                .thenReturn(Optional.of(answer));
 
                 when(user.getId())
-                        .thenReturn("user-1");
+                                .thenReturn("user-1");
 
                 when(answer.getId())
-                        .thenReturn("answer-1");
+                                .thenReturn("answer-1");
 
                 Vote vote = new Vote();
                 vote.setType(VoteType.LIKE);
 
                 when(voteRepository.findByUserIdAndAnswerId(
-                        "user-1",
-                        "answer-1"
-                )).thenReturn(Optional.of(vote));
+                                "user-1",
+                                "answer-1")).thenReturn(Optional.of(vote));
 
                 when(answer.getUpVotes())
-                        .thenReturn(5L);
+                                .thenReturn(5L);
 
                 when(answer.getDownVotes())
-                        .thenReturn(2L);
+                                .thenReturn(2L);
 
                 when(answerRepository.save(answer))
-                        .thenReturn(answer);
+                                .thenReturn(answer);
 
                 Answer result = answerService.vote(
-                        "answer-1",
-                        VoteType.DISLIKE,
-                        user
-                );
+                                "answer-1",
+                                VoteType.DISLIKE,
+                                user);
 
                 assertSame(answer, result);
 
                 verify(answer)
-                        .setDownVotes(3L);
+                                .setDownVotes(3L);
 
                 verify(answer)
-                        .setUpVotes(4L);
+                                .setUpVotes(4L);
 
                 assertEquals(
-                        VoteType.DISLIKE,
-                        vote.getType()
-                );
+                                VoteType.DISLIKE,
+                                vote.getType());
 
                 verify(voteRepository)
-                        .save(vote);
+                                .save(vote);
 
                 verify(voteRepository, never())
-                        .delete(vote);
+                                .delete(vote);
 
                 verify(answerRepository)
-                        .save(answer);
+                                .save(answer);
         }
 }

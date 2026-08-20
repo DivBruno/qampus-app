@@ -30,16 +30,16 @@ public class AnswerService {
     public Answer create(
             String postId,
             AnswerDTO body,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() ->
-                        new RuntimeException("Post not found... x.x"));
+                .orElseThrow(() -> new RuntimeException("Post not found... x.x"));
 
+        User user = (User) authentication.getPrincipal();
 
-                        com.project.qampus.model.User user = (com.project.qampus.model.User) authentication.getPrincipal();
-
+        if (user == null) {
+            throw new RuntimeException("Usuário não encontrado.");
+        }
         Answer answer = new Answer();
 
         answer.setContent(body.content());
@@ -50,10 +50,11 @@ public class AnswerService {
     }
 
     public Answer vote(String answerId, VoteType type, User user) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new RuntimeException("resposta não encontrada"));
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new RuntimeException("resposta não encontrada"));
 
         Optional<Vote> existingVote = voteRepository.findByUserIdAndAnswerId(user.getId(), answer.getId());
-        
+
         // Se já existir voto
         if (existingVote.isPresent()) {
             Vote vote = existingVote.get();
@@ -66,7 +67,7 @@ public class AnswerService {
                     answer.setDownVotes(answer.getDownVotes() - 1);
                 }
                 voteRepository.delete(vote);
-            } 
+            }
             // mudar voto
             else {
                 if (type == VoteType.LIKE) {
@@ -79,7 +80,7 @@ public class AnswerService {
                 vote.setType(type);
                 voteRepository.save(vote);
             }
-        } 
+        }
         // se nao votou
         else {
             Vote vote = new Vote();
@@ -92,8 +93,7 @@ public class AnswerService {
 
             if (type == VoteType.LIKE) {
                 answer.setUpVotes(answer.getUpVotes() + 1);
-            } 
-            else {
+            } else {
                 answer.setDownVotes(answer.getDownVotes() + 1);
             }
         }
