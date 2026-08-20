@@ -8,6 +8,7 @@
 
       <div class="question">
 
+        <!-- VOTAÇÃO DA DÚVIDA -->
         <div class="vote-area">
 
           <button
@@ -59,11 +60,38 @@
 
                 <article class="resposta">
 
-                  <strong>Resposta:</strong>
+                  <!-- VOTAÇÃO DA RESPOSTA -->
+                  <div class="vote-area">
 
-                  <p>
-                    {{ resposta.content }}
-                  </p>
+                    <button
+                      type="button"
+                      class="vote-button"
+                      (click)="votarResposta(resposta, 1)">
+                      △
+                    </button>
+
+                    <span class="vote-count">
+                      {{ resposta.upVotes - resposta.downVotes }}
+                    </span>
+
+                    <button
+                      type="button"
+                      class="vote-button"
+                      (click)="votarResposta(resposta, -1)">
+                      ▽
+                    </button>
+
+                  </div>
+
+                  <div class="resposta-content">
+
+                    <strong>Resposta:</strong>
+
+                    <p>
+                      {{ resposta.content }}
+                    </p>
+
+                  </div>
 
                 </article>
 

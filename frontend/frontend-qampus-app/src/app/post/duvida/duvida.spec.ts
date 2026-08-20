@@ -36,7 +36,9 @@ describe('Duvida', () => {
     findById: vi.fn(),
     createAnswer: vi.fn(),
     upvotePost: vi.fn(),
-    downvotePost: vi.fn()
+    downvotePost: vi.fn(),
+    upvoteAnswer: vi.fn(),
+    downvoteAnswer: vi.fn()
   };
 
   beforeEach(async () => {
@@ -57,6 +59,26 @@ describe('Duvida', () => {
       createdAt: '2026-08-19T10:00:00',
       upVotes: 5,
       downVotes: 2
+    });
+
+    postServiceMock.upvoteAnswer.mockResolvedValue({
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    });
+
+    postServiceMock.downvoteAnswer.mockResolvedValue({
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 4,
+      downVotes: 3
     });
 
     postServiceMock.upvotePost.mockResolvedValue({
@@ -219,5 +241,53 @@ describe('Duvida', () => {
 
     expect(component.post?.upVotes).toBe(12);
     expect(component.post?.downVotes).toBe(3);
+  });
+
+  it('should upvote an answer', async () => {
+    const resposta = {
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 4,
+      downVotes: 2
+    };
+
+    component.respostas = [resposta];
+
+    await component.votarResposta(resposta, 1);
+
+    expect(postServiceMock.upvoteAnswer).toHaveBeenCalledWith(
+      '1',
+      'answer-1'
+    );
+
+    expect(component.respostas[0].upVotes).toBe(5);
+    expect(component.respostas[0].downVotes).toBe(2);
+  });
+
+  it('should downvote an answer', async () => {
+    const resposta = {
+      id: 'answer-1',
+      content: 'Essa é uma resposta válida.',
+      userId: 'user-1',
+      postId: '1',
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 4,
+      downVotes: 2
+    };
+
+    component.respostas = [resposta];
+
+    await component.votarResposta(resposta, -1);
+
+    expect(postServiceMock.downvoteAnswer).toHaveBeenCalledWith(
+      '1',
+      'answer-1'
+    );
+
+    expect(component.respostas[0].upVotes).toBe(4);
+    expect(component.respostas[0].downVotes).toBe(3);
   });
 });
