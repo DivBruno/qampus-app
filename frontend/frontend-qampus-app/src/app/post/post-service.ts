@@ -33,6 +33,9 @@ export interface Answer {
   id: string;
   content: string;
   postId: string;
+  createdAt: string;
+  upVotes: number;
+  downVotes: number;
 }
 
 @Injectable({
@@ -91,6 +94,38 @@ export class PostService {
     return await response.json();
   }
 
+  async upvotePost(id: string): Promise<Post> {
+    const response = await fetch(`${this.apiUrl}/${id}/upvote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao votar positivamente na dúvida');
+    }
+
+    return await response.json();
+  }
+
+  async downvotePost(id: string): Promise<Post> {
+    const response = await fetch(`${this.apiUrl}/${id}/downvote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao votar negativamente na dúvida');
+    }
+
+    return await response.json();
+  }
+
   async editPost(post: EditPostI, id: string){
     const response = await fetch(`${this.apiUrl}/${id}`,{
       method: 'PUT',
@@ -135,4 +170,42 @@ export class PostService {
     });
     return response.ok;
   }
+
+  async upvoteAnswer(postId: string, answerId: string): Promise<Answer> {
+  const response = await fetch(
+    `${this.apiUrl}/${postId}/answer/${answerId}/upvote`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Erro ao votar positivamente na resposta');
+  }
+
+  return await response.json();
+}
+
+async downvoteAnswer(postId: string, answerId: string): Promise<Answer> {
+  const response = await fetch(
+    `${this.apiUrl}/${postId}/answer/${answerId}/downvote`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Erro ao votar negativamente na resposta');
+  }
+
+  return await response.json();
+}
 }

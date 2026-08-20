@@ -34,7 +34,9 @@ describe('Duvida', () => {
 
   const postServiceMock = {
     findById: vi.fn(),
-    createAnswer: vi.fn()
+    createAnswer: vi.fn(),
+    upvotePost: vi.fn(),
+    downvotePost: vi.fn()
   };
 
   beforeEach(async () => {
@@ -52,7 +54,21 @@ describe('Duvida', () => {
       content: 'Essa é uma resposta válida.',
       userId: 'user-1',
       postId: '1',
-      createdAt: '2026-08-19T10:00:00'
+      createdAt: '2026-08-19T10:00:00',
+      upVotes: 5,
+      downVotes: 2
+    });
+
+    postServiceMock.upvotePost.mockResolvedValue({
+      ...postMock,
+      upVotes: 13,
+      downVotes: 3
+    });
+
+    postServiceMock.downvotePost.mockResolvedValue({
+      ...postMock,
+      upVotes: 12,
+      downVotes: 4
     });
 
     await TestBed.configureTestingModule({
@@ -112,16 +128,18 @@ describe('Duvida', () => {
     expect(component.post?.tags[1].name).toBe('TURMA 1');
   });
 
-  it('should increase the up votes', () => {
-    component.votar(1);
+  it('should increase the up votes', async () => {
+    await component.votar(1);
 
+    expect(postServiceMock.upvotePost).toHaveBeenCalledWith('1');
     expect(component.post?.upVotes).toBe(13);
     expect(component.post?.downVotes).toBe(3);
   });
 
-  it('should increase the down votes', () => {
-    component.votar(-1);
+  it('should increase the down votes', async () => {
+    await component.votar(-1);
 
+    expect(postServiceMock.downvotePost).toHaveBeenCalledWith('1');
     expect(component.post?.upVotes).toBe(12);
     expect(component.post?.downVotes).toBe(4);
   });
@@ -179,5 +197,27 @@ describe('Duvida', () => {
     await component.responder();
 
     expect(component.novaResposta).toBe('Resposta válida.');
+  });
+
+  it('should handle upvote error', async () => {
+    postServiceMock.upvotePost.mockRejectedValueOnce(
+      new Error('Erro ao votar')
+    );
+
+    await component.votar(1);
+
+    expect(component.post?.upVotes).toBe(12);
+    expect(component.post?.downVotes).toBe(3);
+  });
+
+  it('should handle downvote error', async () => {
+    postServiceMock.downvotePost.mockRejectedValueOnce(
+      new Error('Erro ao votar')
+    );
+
+    await component.votar(-1);
+
+    expect(component.post?.upVotes).toBe(12);
+    expect(component.post?.downVotes).toBe(3);
   });
 });

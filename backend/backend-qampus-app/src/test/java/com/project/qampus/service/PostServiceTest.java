@@ -427,4 +427,41 @@ class PostServiceTest {
                 verify(repository)
                                 .save(post);
         }
+
+        @Test
+        void shouldCreateDislikeWhenUserHasNotVoted() {
+
+                when(repository.findById("post-1"))
+                                .thenReturn(Optional.of(post));
+
+                when(post.getId())
+                                .thenReturn("post-1");
+
+                when(voteRepository.findByUserIdAndPostId(
+                                "user-id",
+                                "post-1"))
+                                .thenReturn(Optional.empty());
+
+                when(post.getDownVotes())
+                                .thenReturn(3L);
+
+                when(repository.save(post))
+                                .thenReturn(post);
+
+                Post result = postService.vote(
+                                "post-1",
+                                VoteType.DISLIKE,
+                                user);
+
+                assertSame(post, result);
+
+                verify(post)
+                                .setDownVotes(4L);
+
+                verify(voteRepository)
+                                .save(any(Vote.class));
+
+                verify(repository)
+                                .save(post);
+        }
 }

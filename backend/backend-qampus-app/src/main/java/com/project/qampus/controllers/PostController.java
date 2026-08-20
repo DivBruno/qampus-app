@@ -4,7 +4,6 @@ import com.project.qampus.dto.PostDTO;
 import com.project.qampus.dto.PostResponseDTO;
 import com.project.qampus.model.Post;
 import com.project.qampus.model.enums.VoteType;
-import com.project.qampus.repositories.PostRepository;
 import com.project.qampus.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,6 @@ import com.project.qampus.model.User;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
-    private final PostRepository repository;
     private final PostService postService;
 
     @PostMapping("/create")

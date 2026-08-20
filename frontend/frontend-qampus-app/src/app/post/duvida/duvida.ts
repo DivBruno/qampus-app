@@ -40,17 +40,21 @@ export class Duvida implements OnInit {
     }
   }
 
-  votar(valor: number){
+  async votar(valor: number): Promise<void> {
     if (!this.post) {
       return;
     }
 
-    if (valor > 0) {
-      this.postService.votePost(this.post.id, "upvote");
-      this.post.upVotes++;
-    } else {
-      this.postService.votePost(this.post.id, "downvote");
-      this.post.downVotes++;
+    try {
+      const postAtualizado =
+        valor > 0
+          ? await this.postService.upvotePost(this.post.id)
+          : await this.postService.downvotePost(this.post.id);
+
+      this.post = postAtualizado;
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Erro ao votar na dúvida:', error);
     }
   }
 
@@ -76,6 +80,29 @@ export class Duvida implements OnInit {
     } catch (error) {
       console.error('Erro ao responder dúvida:', error);
       alert('Erro ao enviar resposta.');
+    }
+  }
+
+  async votarResposta(resposta: Answer, valor: number): Promise<void> {
+    if (!this.post) {
+      return;
+    }
+
+    try {
+      const respostaAtualizada =
+        valor > 0
+          ? await this.postService.upvoteAnswer(this.post.id, resposta.id)
+          : await this.postService.downvoteAnswer(this.post.id, resposta.id);
+
+      const index = this.respostas.findIndex(
+        r => r.id === resposta.id
+      );
+
+      if (index !== -1) {
+        this.respostas[index] = respostaAtualizada;
+      }
+    } catch (error) {
+      console.error('Erro ao votar na resposta:', error);
     }
   }
 
