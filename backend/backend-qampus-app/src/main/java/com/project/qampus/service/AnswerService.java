@@ -37,11 +37,8 @@ public class AnswerService {
                 .orElseThrow(() ->
                         new RuntimeException("Post not found... x.x"));
 
-        String email = authentication.getName();
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("Usuário não encontrado."));
+                        com.project.qampus.model.User user = (com.project.qampus.model.User) authentication.getPrincipal();
 
         Answer answer = new Answer();
 

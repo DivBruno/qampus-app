@@ -76,6 +76,7 @@ export class Duvida implements OnInit {
 
       this.respostas.push(resposta);
       this.novaResposta = '';
+      this.cdr.detectChanges()
     } catch (error) {
       console.error('Erro ao responder dúvida:', error);
       alert('Erro ao enviar resposta.');

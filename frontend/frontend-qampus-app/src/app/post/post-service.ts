@@ -32,7 +32,6 @@ export interface EditPostI{
 export interface Answer {
   id: string;
   content: string;
-  userId: string;
   postId: string;
   createdAt: string;
   upVotes: number;
@@ -144,18 +143,21 @@ export class PostService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
+        postId,
         content
       })
     });
 
+    const data = await response;
+    console.log(data);
     if (!response.ok) {
       throw new Error('Erro ao criar resposta');
     }
 
-    return await response.json();
+    return data.json();
   }
 
   async upvoteAnswer(postId: string, answerId: string): Promise<Answer> {
