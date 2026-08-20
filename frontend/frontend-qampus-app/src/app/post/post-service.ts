@@ -160,17 +160,6 @@ export class PostService {
     return data.json();
   }
 
-  async votePost(id: string, valor: string){
-    const response = await fetch(`${this.apiUrl}/${id}/${valor}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-    });
-    return response.ok;
-  }
-
   async upvoteAnswer(postId: string, answerId: string): Promise<Answer> {
   const response = await fetch(
     `${this.apiUrl}/${postId}/answer/${answerId}/upvote`,
