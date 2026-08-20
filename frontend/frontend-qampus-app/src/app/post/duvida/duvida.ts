@@ -58,36 +58,6 @@ export class Duvida implements OnInit {
     }
   }
 
-  async votarResposta(resposta: Answer, valor: number): Promise<void> {
-    if (!this.post) {
-      return;
-    }
-
-    try {
-      const respostaAtualizada =
-        valor > 0
-          ? await this.postService.upvoteAnswer(
-              this.post.id,
-              resposta.id
-            )
-          : await this.postService.downvoteAnswer(
-              this.post.id,
-              resposta.id
-            );
-
-      const index = this.respostas.findIndex(
-        r => r.id === resposta.id
-      );
-
-      if (index !== -1) {
-        this.respostas[index] = respostaAtualizada;
-        this.cdr.detectChanges();
-      }
-    } catch (error) {
-      console.error('Erro ao votar na resposta:', error);
-    }
-  }
-
   async responder(): Promise<void> {
     if (!this.novaResposta.trim()) {
       alert('O conteúdo da resposta é obrigatório.');
@@ -109,6 +79,29 @@ export class Duvida implements OnInit {
     } catch (error) {
       console.error('Erro ao responder dúvida:', error);
       alert('Erro ao enviar resposta.');
+    }
+  }
+
+  async votarResposta(resposta: Answer, valor: number): Promise<void> {
+    if (!this.post) {
+      return;
+    }
+
+    try {
+      const respostaAtualizada =
+        valor > 0
+          ? await this.postService.upvoteAnswer(this.post.id, resposta.id)
+          : await this.postService.downvoteAnswer(this.post.id, resposta.id);
+
+      const index = this.respostas.findIndex(
+        r => r.id === resposta.id
+      );
+
+      if (index !== -1) {
+        this.respostas[index] = respostaAtualizada;
+      }
+    } catch (error) {
+      console.error('Erro ao votar na resposta:', error);
     }
   }
 
